@@ -79,8 +79,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </options>
   <mappings>
     <tool lib="6" map="Button2" name="Menu Tool"/>
-    <tool lib="0" map="Ctrl Button1" name="Tunnel"/>
     <tool lib="6" map="Button3" name="Menu Tool"/>
+    <tool lib="0" map="Ctrl Button1" name="Tunnel"/>
   </mappings>
   <toolbar>
     <tool lib="6" name="Poke Tool"/>
@@ -118,24 +118,24 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(210,120)" to="(470,120)"/>
     <wire from="(280,310)" to="(390,310)"/>
     <wire from="(120,310)" to="(250,310)"/>
     <wire from="(420,310)" to="(500,310)"/>
     <wire from="(260,330)" to="(260,380)"/>
     <wire from="(400,330)" to="(400,380)"/>
-    <comp lib="0" loc="(500,310)" name="Pin">
+    <comp lib="0" loc="(470,120)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
-      <a name="width" val="32"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="4" loc="(420,310)" name="Register">
-      <a name="width" val="32"/>
-      <a name="label" val="MAR"/>
+    <comp lib="0" loc="(260,380)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LD PC"/>
     </comp>
-    <comp lib="4" loc="(280,310)" name="Register">
-      <a name="width" val="32"/>
-      <a name="label" val="PC"/>
+    <comp lib="0" loc="(210,120)" name="Pin">
+      <a name="tristate" val="false"/>
     </comp>
     <comp lib="0" loc="(400,380)" name="Pin">
       <a name="facing" val="north"/>
@@ -146,10 +146,19 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="32"/>
       <a name="tristate" val="false"/>
     </comp>
-    <comp lib="0" loc="(260,380)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="LD PC"/>
+    <comp lib="0" loc="(500,310)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="32"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="4" loc="(280,310)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="PC"/>
+    </comp>
+    <comp lib="4" loc="(420,310)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="MAR"/>
     </comp>
   </circuit>
 </project>
