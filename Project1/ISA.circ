@@ -134,37 +134,48 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(140,320)" to="(160,320)"/>
     <wire from="(420,310)" to="(500,310)"/>
     <wire from="(300,270)" to="(300,310)"/>
+    <wire from="(370,320)" to="(370,380)"/>
     <wire from="(140,270)" to="(300,270)"/>
     <wire from="(140,270)" to="(140,300)"/>
-    <comp lib="0" loc="(60,50)" name="Pin">
-      <a name="tristate" val="false"/>
-    </comp>
+    <wire from="(370,320)" to="(390,320)"/>
     <comp lib="3" loc="(200,310)" name="Adder">
       <a name="width" val="32"/>
     </comp>
-    <comp lib="4" loc="(420,310)" name="Register">
-      <a name="width" val="32"/>
-      <a name="label" val="MAR"/>
-    </comp>
-    <comp lib="0" loc="(110,50)" name="Tunnel">
-      <a name="label" val="CK"/>
-    </comp>
-    <comp lib="0" loc="(140,320)" name="Constant">
-      <a name="width" val="32"/>
-      <a name="value" val="0x4"/>
-    </comp>
     <comp lib="0" loc="(210,120)" name="Pin">
       <a name="tristate" val="false"/>
-    </comp>
-    <comp lib="0" loc="(230,380)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="LD PC"/>
     </comp>
     <comp lib="0" loc="(470,120)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(400,380)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="0" loc="(370,380)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LD MAR"/>
+    </comp>
+    <comp lib="0" loc="(60,50)" name="Pin">
+      <a name="tristate" val="false"/>
+    </comp>
+    <comp lib="4" loc="(420,310)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="MAR"/>
+    </comp>
+    <comp lib="0" loc="(140,320)" name="Constant">
+      <a name="width" val="32"/>
+      <a name="value" val="0x4"/>
+    </comp>
+    <comp lib="0" loc="(110,50)" name="Tunnel">
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="0" loc="(230,380)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LD PC"/>
     </comp>
     <comp lib="0" loc="(500,310)" name="Pin">
       <a name="facing" val="west"/>
@@ -175,11 +186,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="4" loc="(280,310)" name="Register">
       <a name="width" val="32"/>
       <a name="label" val="PC"/>
-    </comp>
-    <comp lib="0" loc="(400,380)" name="Pin">
-      <a name="facing" val="north"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="LD MAR"/>
     </comp>
     <comp lib="0" loc="(260,380)" name="Tunnel">
       <a name="facing" val="north"/>
