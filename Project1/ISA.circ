@@ -48,6 +48,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     </tool>
   </lib>
   <lib desc="#Arithmetic" name="3">
+    <tool name="Adder">
+      <a name="width" val="32"/>
+    </tool>
     <tool name="Comparator">
       <a name="mode" val="unsigned"/>
     </tool>
@@ -79,8 +82,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </options>
   <mappings>
     <tool lib="6" map="Button2" name="Menu Tool"/>
-    <tool lib="6" map="Button3" name="Menu Tool"/>
     <tool lib="0" map="Ctrl Button1" name="Tunnel"/>
+    <tool lib="6" map="Button3" name="Menu Tool"/>
   </mappings>
   <toolbar>
     <tool lib="6" name="Poke Tool"/>
@@ -118,33 +121,50 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(210,120)" to="(470,120)"/>
-    <wire from="(280,310)" to="(390,310)"/>
-    <wire from="(120,310)" to="(250,310)"/>
-    <wire from="(420,310)" to="(500,310)"/>
+    <wire from="(280,310)" to="(300,310)"/>
+    <wire from="(140,300)" to="(160,300)"/>
+    <wire from="(60,50)" to="(110,50)"/>
+    <wire from="(230,320)" to="(250,320)"/>
+    <wire from="(200,310)" to="(250,310)"/>
     <wire from="(260,330)" to="(260,380)"/>
     <wire from="(400,330)" to="(400,380)"/>
-    <comp lib="0" loc="(470,120)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="labelloc" val="east"/>
-    </comp>
-    <comp lib="0" loc="(260,380)" name="Pin">
-      <a name="facing" val="north"/>
+    <wire from="(210,120)" to="(470,120)"/>
+    <wire from="(300,310)" to="(390,310)"/>
+    <wire from="(230,320)" to="(230,380)"/>
+    <wire from="(140,320)" to="(160,320)"/>
+    <wire from="(420,310)" to="(500,310)"/>
+    <wire from="(300,270)" to="(300,310)"/>
+    <wire from="(140,270)" to="(300,270)"/>
+    <wire from="(140,270)" to="(140,300)"/>
+    <comp lib="0" loc="(60,50)" name="Pin">
       <a name="tristate" val="false"/>
-      <a name="label" val="LD PC"/>
+    </comp>
+    <comp lib="3" loc="(200,310)" name="Adder">
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="4" loc="(420,310)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="MAR"/>
+    </comp>
+    <comp lib="0" loc="(110,50)" name="Tunnel">
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="0" loc="(140,320)" name="Constant">
+      <a name="width" val="32"/>
+      <a name="value" val="0x4"/>
     </comp>
     <comp lib="0" loc="(210,120)" name="Pin">
       <a name="tristate" val="false"/>
     </comp>
-    <comp lib="0" loc="(400,380)" name="Pin">
+    <comp lib="0" loc="(230,380)" name="Pin">
       <a name="facing" val="north"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="LD MAR"/>
+      <a name="label" val="LD PC"/>
     </comp>
-    <comp lib="0" loc="(120,310)" name="Pin">
-      <a name="width" val="32"/>
-      <a name="tristate" val="false"/>
+    <comp lib="0" loc="(470,120)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(500,310)" name="Pin">
       <a name="facing" val="west"/>
@@ -156,9 +176,14 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="32"/>
       <a name="label" val="PC"/>
     </comp>
-    <comp lib="4" loc="(420,310)" name="Register">
-      <a name="width" val="32"/>
-      <a name="label" val="MAR"/>
+    <comp lib="0" loc="(400,380)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LD MAR"/>
+    </comp>
+    <comp lib="0" loc="(260,380)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
     </comp>
   </circuit>
 </project>
