@@ -259,7 +259,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="32"/>
       <a name="value" val="0x4"/>
     </comp>
-    <comp loc="(450,310)" name="memory"/>
     <comp lib="0" loc="(430,390)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="LD MAR"/>
@@ -396,8 +395,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(690,310)" to="(810,310)"/>
     <wire from="(850,310)" to="(850,320)"/>
     <wire from="(440,140)" to="(440,180)"/>
-    <wire from="(610,380)" to="(610,550)"/>
     <wire from="(460,590)" to="(460,630)"/>
+    <wire from="(610,380)" to="(610,550)"/>
     <wire from="(620,370)" to="(670,370)"/>
     <wire from="(280,250)" to="(280,330)"/>
     <wire from="(200,310)" to="(230,310)"/>
@@ -405,12 +404,12 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(180,330)" to="(180,370)"/>
     <wire from="(250,330)" to="(280,330)"/>
     <wire from="(610,310)" to="(610,380)"/>
-    <wire from="(100,620)" to="(100,650)"/>
     <wire from="(690,300)" to="(690,310)"/>
     <wire from="(790,330)" to="(790,370)"/>
     <wire from="(900,380)" to="(900,390)"/>
     <wire from="(840,320)" to="(850,320)"/>
     <wire from="(280,550)" to="(370,550)"/>
+    <wire from="(100,620)" to="(100,640)"/>
     <wire from="(250,280)" to="(250,320)"/>
     <wire from="(640,350)" to="(670,350)"/>
     <wire from="(900,310)" to="(930,310)"/>
@@ -530,6 +529,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="32"/>
       <a name="label" val="MDR"/>
     </comp>
+    <comp lib="0" loc="(100,640)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+    </comp>
     <comp lib="0" loc="(820,250)" name="Tunnel">
       <a name="facing" val="south"/>
       <a name="label" val="SIZE"/>
@@ -554,7 +557,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="output" val="true"/>
       <a name="width" val="32"/>
       <a name="tristate" val="false"/>
-      <a name="labelloc" val="east"/>
+      <a name="label" val="MDR OUT"/>
+      <a name="labelloc" val="north"/>
     </comp>
     <comp lib="0" loc="(230,310)" name="Splitter">
       <a name="fanout" val="3"/>
@@ -642,7 +646,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="facing" val="north"/>
       <a name="label" val="CK"/>
     </comp>
-    <comp lib="0" loc="(100,650)" name="Constant"/>
     <comp lib="4" loc="(510,100)" name="RAM">
       <a name="addrWidth" val="24"/>
     </comp>
