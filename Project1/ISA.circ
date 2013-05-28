@@ -1477,28 +1477,30 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(610,290)" to="(640,290)"/>
-    <wire from="(540,210)" to="(540,290)"/>
-    <wire from="(160,270)" to="(180,270)"/>
     <wire from="(550,320)" to="(550,330)"/>
-    <wire from="(680,320)" to="(720,320)"/>
-    <wire from="(540,290)" to="(580,290)"/>
-    <wire from="(450,210)" to="(540,210)"/>
-    <wire from="(550,150)" to="(550,280)"/>
     <wire from="(550,320)" to="(640,320)"/>
-    <wire from="(660,270)" to="(660,280)"/>
     <wire from="(160,390)" to="(180,390)"/>
-    <wire from="(380,190)" to="(400,190)"/>
-    <wire from="(550,280)" to="(550,320)"/>
     <wire from="(670,240)" to="(670,270)"/>
-    <wire from="(380,230)" to="(400,230)"/>
-    <wire from="(550,330)" to="(550,340)"/>
-    <wire from="(550,280)" to="(640,280)"/>
-    <wire from="(380,160)" to="(400,160)"/>
     <wire from="(660,270)" to="(670,270)"/>
     <wire from="(380,140)" to="(400,140)"/>
+    <wire from="(550,330)" to="(640,330)"/>
+    <wire from="(540,210)" to="(540,290)"/>
+    <wire from="(550,340)" to="(550,350)"/>
+    <wire from="(160,270)" to="(180,270)"/>
+    <wire from="(540,290)" to="(580,290)"/>
+    <wire from="(680,320)" to="(720,320)"/>
+    <wire from="(550,150)" to="(550,280)"/>
+    <wire from="(450,210)" to="(540,210)"/>
+    <wire from="(550,350)" to="(640,350)"/>
+    <wire from="(660,270)" to="(660,280)"/>
+    <wire from="(380,190)" to="(400,190)"/>
+    <wire from="(550,280)" to="(550,320)"/>
+    <wire from="(380,230)" to="(400,230)"/>
+    <wire from="(550,330)" to="(550,340)"/>
+    <wire from="(380,160)" to="(400,160)"/>
+    <wire from="(550,280)" to="(640,280)"/>
     <wire from="(440,150)" to="(550,150)"/>
     <wire from="(550,340)" to="(640,340)"/>
-    <wire from="(550,330)" to="(640,330)"/>
     <comp lib="1" loc="(610,290)" name="NOT Gate">
       <a name="width" val="32"/>
     </comp>
