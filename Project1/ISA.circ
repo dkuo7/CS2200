@@ -1635,4 +1635,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="32"/>
     </comp>
   </circuit>
+  <circuit name="Control Unit">
+    <a name="circuit" val="Control Unit"/>
+    <a name="clabel" val=""/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="SansSerif plain 12"/>
+  </circuit>
 </project>
