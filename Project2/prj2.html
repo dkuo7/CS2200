@@ -1,0 +1,253 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>CS 2200 Summer 2013 Project 2</title>
+</head><body>
+<h1>
+<table>
+<tbody><tr>
+<td>
+<img src="pics/tinylogo.jpg" alt="CS 2200" align="center" border="0"></td>
+<td><h1>CS 2200 Intro to Systems and Networks<br>Project 2<br>Summer 2012</h1>
+</td>
+</tr>
+</tbody></table>
+</h1>
+<p>
+We have just spent the last few weeks implementing our 32-bit datapath.  The
+simple 32-bit LC-2200 is capable of performing advanced computational tasks
+and logical decision making.  Now it is time for us to move on to something
+more advanced.
+</p>
+<p>
+We have invested a great deal of time and money into developing a more powerful
+LC-2200 computer.  This one supports interrupts.
+</p>
+<p>
+The only trouble is that the interrupt support does not appear to be completed.
+We are quite disappointed by this, and so it is your assignment to fully implement
+and test interrupts using your datapath.
+
+</p><p>
+This project has you add the additional support needed to make all this work properly.
+ Your job will be to hook up the interrupt acknowledge lines to the input devices,
+ modify the datapath to support interrupt operations, and write an interrupt handler
+ to increment the clock value at a designated memory address.
+</p>
+
+
+<li>Interrupt Support
+  <ol>
+  <li>Part 1: Initial Interrupt Hardware Support
+  </li><li>Part 2: Controller Interrupt Support
+  </li><li>Part 3: Interrupt Handler
+  </li></ol>
+</li>
+<li>What To Turn In
+  <ol>
+  <li>everything
+  </li></ol>
+</li>
+
+<!--
+<hr>
+<a name="what"><h2>What We've Provided</h2></a>
+<p> We have provided the LC2200-32 datapath, the completed XML (or FSM) file from the previous
+project and a assembly file to run on the datapath.  Intergenerator.circ has also been provided,
+which will generate an interrupt signal every so often.
+</p>
+
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+<hr>
+<a name="ints"><h2>Interrupt Support</h2></a>
+<a name="p0"><h4>Part 1: Initial Interrupt Hardware Support</h4></a>
+<p>
+Initial Interrupt hardware support
+</p>
+<p>
+For this part of the assignment you need to add hardware support for interrupts.
+ </p>
+<p>As you may have noticed we have no way to keep track of whether or not
+ interrupts are currently enabled or disabled.  Make an interrupts enabled
+ register (the output of this register is referred to as <b>IE</b> signal in the rest of the project description.)
+</p>
+<p>
+You should modify your memory circuit to detect unaligned accesses (Last two bits not 00 for word access) for this project dont worry about correcting the access:
+</p>
+<ol>
+<li>It should signal the controller with an interrupt when it detects an unaligned access
+</li><li>If it has fired an interrupt it should continue to signal the interrupt until it receives an IntAck signal.
+ When it receives IntAck it should drive its device handler address to the bus in the following cycle (or if
+ you prefer you may use the same cycle you assert IntAck.)
+</li></ol>
+<p>
+You will need hardware to store the interrupt signal in case it is not immediately 
+acknowledged, and hardware that will drive the device handler
+onto the bus in the cycle after it has received IntACK(or if you prefer it can be the same cycle).
+
+</p>
+
+<p>For some interrupt related instructions we will need to directly access the
+ reserved interrupt register (Reffered to as IntR from here on).  Create the hardware needed to select IntR 
+within microcode.
+</p>
+<hr>
+<a name="p1"><h4>Part 2: Controller Interrupt Support</h4></a>
+
+<p>
+In this part of the assignment you will modify the microcode
+ of the LC2200-32.  </p>
+
+<p>
+You will need to implement three new instructions to handle interrupts 
+<ol>
+<li> EI - This should tell the processor to start allowing the currently running task to be interrupted
+</li>
+<li> DI - This will make sure after it has been executed that task can not be interrupted
+</li>
+<li> RTI - This should transfer control to the address stored in IntR, and enable interrupts
+</li>
+</ol>
+</p>
+
+<p>
+<b> Implementing the control for interrupt handling: </b>
+
+</p>
+
+<p>The figure below is provided for reference purposes.  </p>
+
+<p><a href="pics/three_rom_controller.png" target="pics/three_rom_controller.png"><img src="pics/three_rom_controller.png" border="0"></a></p>
+
+<p>As you may have noticed, we currently have an unused input on our 
+multiplexer.
+  This gives us room to add another ROM to control the next microstate 
+upon an interrupt. You
+  need to use this fourth ROM to generate the microstate address when an
+ interrupt is signaled.  The input to
+  this ROM will be controlled by your interrupt enabled register and the
+ interrupt
+  signal asserted by the memory error interrupt from the part 1.  This fourth 
+ROM should have a 2-bit address and contain the next state. The least significant 
+input bit should be an AND of the IE register output and the interrupt 
+signal from the interrupt device.  The most significant input bit of the
+ ROM should be set to 0.  The output will depend on how you write the 
+microcode for the main ROM.
+</p>
+<ul><li>
+<p>First we must modify the controller.  Add the new Interrupts ROM as described above.  <br>
+We will also be needing 2 new signals for interrupt control that are generated by the main ROM (that controls the datapath):
+</p><ol>
+<li> LdEnInt (This asserts the load input of the IE register),
+</li><li> IntAck (this sends an interrupt acknowledge to the device).
+</li></ol>
+
+You need to extend the size of the main ROM accordingly.
+
+</li><li>
+Second we must add a way to check for interrupts. You can accomplish
+this by
+ modifying FETCH macrostate in the following way (basically we are doing
+ the work that needs to be done implicitly by the processor in the INT
+macrostate described in Chapter 4 of the textbook and class lectures in
+the FETCH macrostate itself):
+
+
+<ol>
+  <li> Check to see if an interrupt is raised (and the proccessor is accepting them right now)
+  </li><li> If not, continue as normal.
+  </li><li> If yes:
+  <ol>
+  <li> Save the current PC into IntR.
+  </li><li> Disable interrupts.
+  </li><li> Assert the interrupt acknowledge line, and then a cycle
+  later (depending on how you chose to implement part 1 maybe the same cycle)
+  use the value put out on the bus by the device that
+  received the IntAct signal, as the new PC value.
+  </li><li> Continue with the FETCH marcrostate.
+  </li></ol>
+</li></ol>
+
+</p></li><li>
+Third we need the three new instructions for supporting interrupts as
+described in Chapter 4. These are the EI, DI, and RETI instructions.  You
+ need to write the microcode in the main ROM controlling the datapath
+for these three new instructions.
+<ul>
+<li> EI sets the IE register to 1.
+</li><li> DI sets the IE register to 0.
+</li><li> RTI loads IntR into PC, and enables interrupts.
+</li></ul>
+
+<p></p>
+
+
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+<hr>
+<a name="p2"><h4>Part 3: Interrupt Handler for the Memory
+Interrupts</h4></a>
+<p>
+Now that we have interrupt support within the processor, we need to
+write an interrupt handler for our memory interrupt so that it will
+ not interfere with the correct running of any user program.
+</p>
+<p>In prj2.s we provide you with a program that runs in
+the background.  For part 3 of this project, you have to write an
+interrupt handler for the memory access device.  Refer to Chapter 4 of the
+textbook to see how to write a correct interrupt handler.  As detailed
+in that chapter, your handler will first save the current value of IntR
+(the return address to where you came from into this handler), and the
+state of the interrupted program. Prior to doing the actual work for
+handling the memory interrupt, the handler should enable interrupts
+(which would have been disabled implicitly by the processor in the FETCH
+ macrostate). The actual work to be done in the handler is to increment a
+ error count variable in memory.  Once this work is done, the handler should
+restore the state of the original program and return to where it came
+from using RETI.
+</p><p>
+The handler you have written should run every time the memory interrupt
+is triggered.  The handler should be written such that interrupts can be
+ nested (i.e., higher priority interrupts should be allowed while
+running the handler). With that in mind though, interrupts should be
+enabled for as long as possible within the handler.
+</p>
+<p>Load the starting address of the handler into the memory error detection chip
+ so that it will drive it to the bus when it recieves IntAck while waiting to 
+interrupt.
+</p>
+<p>More information about this part of the project is included in prj2.s.  Search for the FIX ME to find where you need to modify code.  
+</p>
+<p>Once you have completed the interrupt handler you must assemble the entire program, and test it on your processor (this should be assumed).
+</p>
+
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+<!-- ******************************************************************* -->
+
+<hr>
+<a name="turnin"><h4>What To Turn In</h4></a>
+<p>
+You should turnin the following files to Tsquare:
+</p>
+<p>
+        <strong>0.</strong> The <code>prj2.s</code> file containing your
+        interrupt handler and our given code.
+</p>
+<p>
+	<strong>1.</strong> The <code>LC-2200-32.circ</code> file containing
+	your LC2200 32 bit processor.
+</p>
+<p>
+	<strong>2.</strong> Memory dumps of the updated roms, and of the assembled program
+</p>
+
+<br><br>
+<hr>
+<em>End of CS 2200 Summer 2012 Project 2</em>
+<p>
+<code> Written by Michael Strain for Fall 2010; modified by Matthew Amidon for Spring 2011; modified by Matthew amidon for Summer 2011; modified by Nick Olive for Summer 2012; modified by Nick Olive for Summer 2013</code>
+</p>
+</li></ol></body></html>
