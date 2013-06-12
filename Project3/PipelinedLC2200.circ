@@ -25,6 +25,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <tool name="Pin">
       <a name="tristate" val="false"/>
     </tool>
+    <tool name="Tunnel">
+      <a name="facing" val="south"/>
+    </tool>
   </lib>
   <lib desc="#Gates" name="1">
     <tool name="AND Gate">
@@ -75,7 +78,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   <lib desc="#Memory" name="4">
     <tool name="Register">
       <a name="width" val="32"/>
-      <a name="label" val="Register"/>
     </tool>
     <tool name="ROM">
       <a name="contents">addr/data: 8 8
@@ -141,6 +143,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <comp loc="(310,230)" name="FBUF">
+      <a name="label" val="FBUF"/>
+    </comp>
   </circuit>
   <circuit name="FBUF">
     <a name="circuit" val="FBUF"/>
@@ -289,6 +294,87 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(380,370)" to="(380,380)"/>
+    <wire from="(380,460)" to="(380,470)"/>
+    <wire from="(340,540)" to="(340,560)"/>
+    <wire from="(390,540)" to="(390,560)"/>
+    <wire from="(370,300)" to="(380,300)"/>
+    <wire from="(380,460)" to="(390,460)"/>
+    <wire from="(380,370)" to="(390,370)"/>
+    <wire from="(380,200)" to="(390,200)"/>
+    <wire from="(370,210)" to="(380,210)"/>
+    <wire from="(380,290)" to="(380,300)"/>
+    <wire from="(380,200)" to="(380,210)"/>
+    <wire from="(380,290)" to="(390,290)"/>
+    <wire from="(370,380)" to="(380,380)"/>
+    <wire from="(370,470)" to="(380,470)"/>
+    <comp lib="0" loc="(370,300)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LD"/>
+    </comp>
+    <comp lib="0" loc="(400,380)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="0" loc="(400,210)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="4" loc="(420,190)" name="Register">
+      <a name="label" val="OPCODE"/>
+    </comp>
+    <comp lib="0" loc="(370,470)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LD"/>
+    </comp>
+    <comp lib="4" loc="(420,450)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="SR2 VAL"/>
+    </comp>
+    <comp lib="0" loc="(370,210)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LD"/>
+    </comp>
+    <comp lib="4" loc="(420,280)" name="Register">
+      <a name="width" val="4"/>
+      <a name="label" val="REG DST"/>
+    </comp>
+    <comp lib="0" loc="(400,300)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="0" loc="(390,560)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="CLOCK"/>
+      <a name="labelloc" val="south"/>
+    </comp>
+    <comp lib="4" loc="(420,360)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="SR1 VAL"/>
+    </comp>
+    <comp lib="0" loc="(370,380)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LD"/>
+    </comp>
+    <comp lib="0" loc="(340,540)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="label" val="LD"/>
+    </comp>
+    <comp lib="0" loc="(340,560)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="LOAD"/>
+      <a name="labelloc" val="south"/>
+    </comp>
+    <comp lib="0" loc="(390,540)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="0" loc="(400,470)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
   </circuit>
   <circuit name="EBUF">
     <a name="circuit" val="EBUF"/>
