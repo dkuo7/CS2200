@@ -159,7 +159,7 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="tristate" val="false"/>
     </tool>
     <tool lib="0" name="Pin">
-      <a name="facing" val="west"/>
+      <a name="facing" val="south"/>
       <a name="output" val="true"/>
       <a name="width" val="2"/>
       <a name="labelloc" val="east"/>
@@ -180,15 +180,15 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   <circuit name="my circuit">
     <a name="circuit" val="my circuit"/>
     <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabelup" val="south"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(630,220)" to="(650,220)"/>
     <wire from="(300,260)" to="(300,300)"/>
     <wire from="(150,240)" to="(150,260)"/>
     <wire from="(130,490)" to="(130,520)"/>
     <wire from="(730,290)" to="(750,290)"/>
     <wire from="(100,260)" to="(100,280)"/>
     <wire from="(260,320)" to="(260,340)"/>
-    <wire from="(630,260)" to="(630,280)"/>
     <wire from="(370,300)" to="(410,300)"/>
     <wire from="(150,290)" to="(180,290)"/>
     <wire from="(570,290)" to="(590,290)"/>
@@ -200,10 +200,11 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(730,270)" to="(730,290)"/>
     <wire from="(70,580)" to="(70,610)"/>
     <wire from="(100,280)" to="(110,280)"/>
-    <wire from="(630,260)" to="(740,260)"/>
+    <wire from="(710,220)" to="(740,220)"/>
     <wire from="(210,300)" to="(250,300)"/>
     <wire from="(440,290)" to="(460,290)"/>
     <wire from="(280,300)" to="(300,300)"/>
+    <wire from="(350,320)" to="(350,340)"/>
     <wire from="(610,320)" to="(610,340)"/>
     <wire from="(440,310)" to="(500,310)"/>
     <wire from="(540,300)" to="(590,300)"/>
@@ -214,12 +215,14 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(570,270)" to="(570,290)"/>
     <wire from="(640,270)" to="(730,270)"/>
     <wire from="(620,280)" to="(630,280)"/>
-    <wire from="(740,260)" to="(740,280)"/>
     <wire from="(230,310)" to="(230,340)"/>
     <wire from="(580,260)" to="(580,280)"/>
     <wire from="(590,330)" to="(590,340)"/>
+    <wire from="(760,310)" to="(760,320)"/>
     <wire from="(500,360)" to="(510,360)"/>
     <wire from="(410,340)" to="(420,340)"/>
+    <wire from="(770,310)" to="(770,330)"/>
+    <wire from="(750,320)" to="(750,330)"/>
     <wire from="(440,300)" to="(500,300)"/>
     <wire from="(450,260)" to="(450,280)"/>
     <wire from="(220,490)" to="(220,520)"/>
@@ -228,6 +231,7 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(230,310)" to="(250,310)"/>
     <wire from="(740,280)" to="(750,280)"/>
     <wire from="(580,280)" to="(590,280)"/>
+    <wire from="(680,240)" to="(680,290)"/>
     <wire from="(150,260)" to="(300,260)"/>
     <wire from="(700,300)" to="(750,300)"/>
     <wire from="(100,260)" to="(150,260)"/>
@@ -237,8 +241,11 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(500,360)" to="(500,370)"/>
     <wire from="(530,350)" to="(530,370)"/>
     <wire from="(540,310)" to="(590,310)"/>
+    <wire from="(630,220)" to="(630,280)"/>
+    <wire from="(740,220)" to="(740,280)"/>
     <wire from="(190,320)" to="(190,340)"/>
     <wire from="(180,490)" to="(180,520)"/>
+    <wire from="(750,320)" to="(760,320)"/>
     <wire from="(460,270)" to="(570,270)"/>
     <wire from="(80,300)" to="(110,300)"/>
     <wire from="(510,350)" to="(510,360)"/>
@@ -265,9 +272,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="disabled" val="0"/>
       <a name="enable" val="false"/>
     </comp>
-    <comp loc="(620,280)" name="DBUF">
-      <a name="label" val="DBUF"/>
+    <comp loc="(700,240)" name="Opcode Dissector">
+      <a name="facing" val="south"/>
     </comp>
+    <comp loc="(620,280)" name="DBUF"/>
     <comp lib="0" loc="(220,490)" name="Pin">
       <a name="facing" val="south"/>
       <a name="tristate" val="false"/>
@@ -294,6 +302,11 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="0" loc="(70,580)" name="Pin">
       <a name="facing" val="south"/>
       <a name="tristate" val="false"/>
+    </comp>
+    <comp lib="0" loc="(750,330)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="LD"/>
+      <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp lib="0" loc="(130,520)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -322,17 +335,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="LD REG"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
-    <comp loc="(860,260)" name="MBUF">
-      <a name="label" val="MBUF"/>
-    </comp>
     <comp lib="0" loc="(220,520)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="LD"/>
-      <a name="labelfont" val="Dialog plain 10"/>
-    </comp>
-    <comp lib="0" loc="(350,320)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="CK"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp lib="0" loc="(590,340)" name="Tunnel">
@@ -345,16 +350,25 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="tristate" val="false"/>
     </comp>
     <comp loc="(370,300)" name="I-MEM"/>
-    <comp loc="(780,280)" name="EBUF">
-      <a name="label" val="EBUF"/>
-    </comp>
+    <comp loc="(780,280)" name="EBUF"/>
     <comp lib="0" loc="(260,340)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="CK"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
+    <comp lib="0" loc="(770,330)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
+    <comp loc="(780,460)" name="MBUF"/>
     <comp lib="0" loc="(80,300)" name="Constant">
       <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(350,340)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+      <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp lib="3" loc="(150,290)" name="Adder">
       <a name="width" val="32"/>
@@ -519,7 +533,7 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="DBUF">
     <a name="circuit" val="DBUF"/>
-    <a name="clabel" val=""/>
+    <a name="clabel" val="D\nBUF"/>
     <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(380,370)" to="(380,380)"/>
@@ -663,8 +677,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="EBUF">
     <a name="circuit" val="EBUF"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="E\nBUF"/>
+    <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(420,380)" to="(620,380)"/>
     <wire from="(380,390)" to="(380,400)"/>
@@ -778,8 +792,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="MBUF">
     <a name="circuit" val="MBUF"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="M\nBUF"/>
+    <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(420,380)" to="(620,380)"/>
     <wire from="(380,390)" to="(380,400)"/>
@@ -893,8 +907,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="ALU">
     <a name="circuit" val="ALU"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="ALU"/>
+    <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <appear>
       <rect fill="none" height="30" stroke="#000000" stroke-width="2" width="30" x="50" y="50"/>
@@ -1591,9 +1605,16 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="I-MEM">
     <a name="circuit" val="I-MEM"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="I\nMEM"/>
+    <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <appear>
+      <rect fill="none" height="30" stroke="#000000" stroke-width="2" width="30" x="50" y="50"/>
+      <circ-port height="8" pin="170,300" width="8" x="46" y="56"/>
+      <circ-port height="10" pin="620,290" width="10" x="75" y="55"/>
+      <circ-port height="8" pin="420,380" width="8" x="56" y="76"/>
+      <circ-anchor facing="east" height="6" width="6" x="77" y="57"/>
+    </appear>
     <wire from="(490,290)" to="(620,290)"/>
     <wire from="(420,330)" to="(420,380)"/>
     <wire from="(170,300)" to="(210,300)"/>
@@ -1666,11 +1687,22 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="Opcode Dissector">
     <a name="circuit" val="Opcode Dissector"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="DISSECT"/>
+    <a name="clabelup" val="west"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(280,310)" to="(300,310)"/>
+    <appear>
+      <rect fill="none" height="60" stroke="#000000" stroke-width="2" width="30" x="50" y="50"/>
+      <circ-port height="10" pin="550,210" width="10" x="75" y="55"/>
+      <circ-port height="10" pin="550,260" width="10" x="75" y="65"/>
+      <circ-port height="10" pin="550,300" width="10" x="75" y="75"/>
+      <circ-port height="10" pin="550,340" width="10" x="75" y="85"/>
+      <circ-port height="10" pin="550,380" width="10" x="75" y="95"/>
+      <circ-port height="8" pin="210,350" width="8" x="56" y="106"/>
+      <circ-port height="10" pin="210,250" width="10" x="55" y="45"/>
+      <circ-anchor facing="east" height="6" width="6" x="77" y="57"/>
+    </appear>
     <wire from="(320,330)" to="(370,330)"/>
+    <wire from="(210,250)" to="(210,310)"/>
     <wire from="(370,260)" to="(370,300)"/>
     <wire from="(320,300)" to="(370,300)"/>
     <wire from="(380,340)" to="(550,340)"/>
@@ -1680,11 +1712,20 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(360,210)" to="(550,210)"/>
     <wire from="(370,260)" to="(550,260)"/>
     <wire from="(380,320)" to="(380,340)"/>
+    <wire from="(210,310)" to="(300,310)"/>
     <wire from="(370,380)" to="(550,380)"/>
+    <wire from="(210,310)" to="(210,350)"/>
     <wire from="(380,300)" to="(380,310)"/>
     <wire from="(320,310)" to="(380,310)"/>
     <wire from="(370,330)" to="(370,380)"/>
     <wire from="(320,290)" to="(360,290)"/>
+    <comp lib="0" loc="(210,250)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="output" val="true"/>
+      <a name="width" val="8"/>
+      <a name="label" val="OPCODE OUT"/>
+      <a name="labelloc" val="north"/>
+    </comp>
     <comp lib="0" loc="(300,310)" name="Splitter">
       <a name="fanout" val="5"/>
       <a name="incoming" val="8"/>
@@ -1723,10 +1764,12 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="MEM OP"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(280,310)" name="Pin">
+    <comp lib="0" loc="(210,350)" name="Pin">
+      <a name="facing" val="north"/>
       <a name="width" val="8"/>
       <a name="tristate" val="false"/>
       <a name="label" val="OPCODE IN"/>
+      <a name="labelloc" val="south"/>
     </comp>
     <comp lib="0" loc="(550,300)" name="Pin">
       <a name="facing" val="west"/>
@@ -1735,5 +1778,11 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="ALU SEL"/>
       <a name="labelloc" val="east"/>
     </comp>
+  </circuit>
+  <circuit name="MEM">
+    <a name="circuit" val="MEM"/>
+    <a name="clabel" val=""/>
+    <a name="clabelup" val="east"/>
+    <a name="clabelfont" val="SansSerif plain 12"/>
   </circuit>
 </project>
