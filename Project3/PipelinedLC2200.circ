@@ -188,62 +188,50 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(130,490)" to="(130,520)"/>
     <wire from="(100,260)" to="(100,280)"/>
     <wire from="(260,320)" to="(260,340)"/>
+    <wire from="(370,300)" to="(410,300)"/>
+    <wire from="(500,360)" to="(510,360)"/>
     <wire from="(150,290)" to="(180,290)"/>
+    <wire from="(410,340)" to="(420,340)"/>
+    <wire from="(440,280)" to="(450,280)"/>
+    <wire from="(430,330)" to="(430,350)"/>
+    <wire from="(70,580)" to="(70,610)"/>
+    <wire from="(440,300)" to="(500,300)"/>
     <wire from="(100,280)" to="(110,280)"/>
+    <wire from="(440,320)" to="(450,320)"/>
     <wire from="(220,490)" to="(220,520)"/>
     <wire from="(230,310)" to="(250,310)"/>
     <wire from="(70,490)" to="(70,520)"/>
-    <wire from="(430,340)" to="(440,340)"/>
-    <wire from="(450,330)" to="(450,350)"/>
     <wire from="(150,260)" to="(300,260)"/>
     <wire from="(210,300)" to="(250,300)"/>
-    <wire from="(440,330)" to="(440,340)"/>
+    <wire from="(420,330)" to="(420,340)"/>
     <wire from="(100,260)" to="(150,260)"/>
+    <wire from="(500,360)" to="(500,370)"/>
+    <wire from="(410,340)" to="(410,350)"/>
+    <wire from="(530,350)" to="(530,370)"/>
+    <wire from="(440,290)" to="(450,290)"/>
     <wire from="(280,300)" to="(300,300)"/>
+    <wire from="(440,310)" to="(500,310)"/>
     <wire from="(190,320)" to="(190,340)"/>
-    <wire from="(430,340)" to="(430,350)"/>
     <wire from="(300,300)" to="(340,300)"/>
     <wire from="(180,490)" to="(180,520)"/>
-    <wire from="(370,300)" to="(430,300)"/>
     <wire from="(80,300)" to="(110,300)"/>
+    <wire from="(510,350)" to="(510,360)"/>
     <wire from="(160,310)" to="(180,310)"/>
-    <comp lib="0" loc="(350,320)" name="Tunnel">
+    <comp loc="(440,280)" name="FBUF"/>
+    <comp lib="0" loc="(410,350)" name="Tunnel">
       <a name="facing" val="north"/>
-      <a name="label" val="CK"/>
+      <a name="label" val="LD"/>
       <a name="labelfont" val="Dialog plain 10"/>
-    </comp>
-    <comp loc="(660,270)" name="DBUF">
-      <a name="label" val="DBUF"/>
-    </comp>
-    <comp loc="(370,300)" name="I-MEM"/>
-    <comp lib="0" loc="(180,490)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="tristate" val="false"/>
-    </comp>
-    <comp loc="(770,270)" name="EBUF">
-      <a name="label" val="EBUF"/>
-    </comp>
-    <comp lib="0" loc="(260,340)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="CK"/>
-      <a name="labelfont" val="Dialog plain 10"/>
-    </comp>
-    <comp loc="(460,280)" name="FBUF">
-      <a name="label" val="FBUF"/>
     </comp>
     <comp lib="0" loc="(230,340)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="LD PC"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
-    <comp lib="0" loc="(430,350)" name="Tunnel">
+    <comp lib="0" loc="(500,370)" name="Tunnel">
       <a name="facing" val="north"/>
-      <a name="label" val="LD"/>
+      <a name="label" val="LD REG"/>
       <a name="labelfont" val="Dialog plain 10"/>
-    </comp>
-    <comp lib="0" loc="(80,300)" name="Constant">
-      <a name="width" val="32"/>
-      <a name="value" val="0x4"/>
     </comp>
     <comp lib="2" loc="(210,300)" name="Multiplexer">
       <a name="width" val="32"/>
@@ -263,13 +251,14 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="facing" val="south"/>
       <a name="tristate" val="false"/>
     </comp>
-    <comp lib="0" loc="(450,350)" name="Tunnel">
+    <comp lib="0" loc="(430,350)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="CK"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
-    <comp lib="3" loc="(150,290)" name="Adder">
-      <a name="width" val="32"/>
+    <comp lib="0" loc="(70,580)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="tristate" val="false"/>
     </comp>
     <comp lib="0" loc="(130,520)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -282,38 +271,76 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="PC"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
+    <comp lib="0" loc="(530,370)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
     <comp lib="0" loc="(190,340)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="JUMP"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
-    <comp lib="0" loc="(70,520)" name="Clock">
+    <comp lib="0" loc="(70,610)" name="Tunnel">
       <a name="facing" val="north"/>
-      <a name="label" val="CLOCK"/>
-      <a name="labelloc" val="south"/>
+      <a name="label" val="LD REG"/>
+      <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp loc="(860,260)" name="MBUF">
       <a name="label" val="MBUF"/>
-    </comp>
-    <comp lib="4" loc="(280,300)" name="Register">
-      <a name="width" val="32"/>
-      <a name="label" val="PC"/>
-    </comp>
-    <comp lib="0" loc="(180,520)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="JUMP"/>
-      <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp lib="0" loc="(220,520)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="LD"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
+    <comp lib="0" loc="(350,320)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
+    <comp lib="0" loc="(180,490)" name="Pin">
+      <a name="facing" val="south"/>
+      <a name="tristate" val="false"/>
+    </comp>
+    <comp loc="(370,300)" name="I-MEM"/>
+    <comp loc="(770,270)" name="EBUF">
+      <a name="label" val="EBUF"/>
+    </comp>
+    <comp lib="0" loc="(260,340)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
+    <comp lib="0" loc="(80,300)" name="Constant">
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="3" loc="(150,290)" name="Adder">
+      <a name="width" val="32"/>
+    </comp>
+    <comp loc="(720,540)" name="DBUF">
+      <a name="label" val="DBUF"/>
+    </comp>
+    <comp loc="(540,300)" name="Register File"/>
+    <comp lib="0" loc="(70,520)" name="Clock">
+      <a name="facing" val="north"/>
+      <a name="label" val="CLOCK"/>
+      <a name="labelloc" val="south"/>
+    </comp>
+    <comp lib="0" loc="(180,520)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="JUMP"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
+    <comp lib="4" loc="(280,300)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="PC"/>
+    </comp>
   </circuit>
   <circuit name="FBUF">
     <a name="circuit" val="FBUF"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="F\nBUF"/>
+    <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(380,300)" to="(380,350)"/>
     <wire from="(550,320)" to="(560,320)"/>
@@ -901,9 +928,21 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </circuit>
   <circuit name="Register File">
     <a name="circuit" val="Register File"/>
-    <a name="clabel" val=""/>
-    <a name="clabelup" val="east"/>
+    <a name="clabel" val="REG \nFILE"/>
+    <a name="clabelup" val="north"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <appear>
+      <rect fill="none" height="61" stroke="#000000" stroke-width="2" width="39" x="52" y="49"/>
+      <circ-port height="8" pin="100,250" width="8" x="46" y="56"/>
+      <circ-port height="8" pin="100,360" width="8" x="46" y="66"/>
+      <circ-port height="10" pin="870,220" width="10" x="85" y="55"/>
+      <circ-port height="10" pin="870,340" width="10" x="85" y="65"/>
+      <circ-port height="8" pin="410,60" width="8" x="56" y="46"/>
+      <circ-port height="8" pin="510,110" width="8" x="76" y="46"/>
+      <circ-port height="8" pin="470,630" width="8" x="56" y="106"/>
+      <circ-port height="8" pin="710,600" width="8" x="76" y="106"/>
+      <circ-anchor facing="east" height="6" width="6" x="87" y="57"/>
+    </appear>
     <wire from="(470,460)" to="(540,460)"/>
     <wire from="(520,430)" to="(530,430)"/>
     <wire from="(380,90)" to="(400,90)"/>
