@@ -3,40 +3,7 @@
 This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110.
 <lib desc="#Wiring" name="0">
     <tool name="Splitter">
-      <a name="fanout" val="5"/>
-      <a name="incoming" val="32"/>
       <a name="appear" val="center"/>
-      <a name="bit1" val="0"/>
-      <a name="bit2" val="0"/>
-      <a name="bit3" val="0"/>
-      <a name="bit4" val="0"/>
-      <a name="bit5" val="0"/>
-      <a name="bit6" val="0"/>
-      <a name="bit7" val="1"/>
-      <a name="bit8" val="1"/>
-      <a name="bit9" val="1"/>
-      <a name="bit10" val="1"/>
-      <a name="bit11" val="1"/>
-      <a name="bit12" val="1"/>
-      <a name="bit13" val="1"/>
-      <a name="bit14" val="2"/>
-      <a name="bit15" val="2"/>
-      <a name="bit16" val="2"/>
-      <a name="bit17" val="2"/>
-      <a name="bit18" val="2"/>
-      <a name="bit19" val="2"/>
-      <a name="bit20" val="3"/>
-      <a name="bit21" val="3"/>
-      <a name="bit22" val="3"/>
-      <a name="bit23" val="3"/>
-      <a name="bit24" val="3"/>
-      <a name="bit25" val="3"/>
-      <a name="bit26" val="4"/>
-      <a name="bit27" val="4"/>
-      <a name="bit28" val="4"/>
-      <a name="bit29" val="4"/>
-      <a name="bit30" val="4"/>
-      <a name="bit31" val="4"/>
     </tool>
     <tool name="Pin">
       <a name="tristate" val="false"/>
@@ -52,10 +19,13 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     </tool>
     <tool name="Constant">
       <a name="width" val="32"/>
-      <a name="value" val="0x30"/>
+      <a name="value" val="0x0"/>
     </tool>
   </lib>
   <lib desc="#Gates" name="1">
+    <tool name="NOT Gate">
+      <a name="facing" val="north"/>
+    </tool>
     <tool name="AND Gate">
       <a name="width" val="32"/>
       <a name="inputs" val="2"/>
@@ -164,9 +134,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="OPCODE"/>
     </tool>
     <tool lib="0" name="Pin">
-      <a name="facing" val="south"/>
+      <a name="facing" val="west"/>
       <a name="output" val="true"/>
-      <a name="width" val="2"/>
       <a name="labelloc" val="east"/>
     </tool>
     <tool lib="1" name="NOT Gate"/>
@@ -188,16 +157,18 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabelup" val="south"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(530,240)" to="(530,290)"/>
+    <wire from="(990,270)" to="(1000,270)"/>
     <wire from="(130,490)" to="(130,520)"/>
     <wire from="(100,260)" to="(100,280)"/>
     <wire from="(150,290)" to="(180,290)"/>
     <wire from="(570,290)" to="(590,290)"/>
     <wire from="(900,270)" to="(900,290)"/>
     <wire from="(910,280)" to="(930,280)"/>
+    <wire from="(490,450)" to="(490,480)"/>
     <wire from="(440,280)" to="(450,280)"/>
     <wire from="(430,330)" to="(430,350)"/>
-    <wire from="(70,580)" to="(70,610)"/>
     <wire from="(210,300)" to="(250,300)"/>
+    <wire from="(990,270)" to="(990,280)"/>
     <wire from="(280,300)" to="(300,300)"/>
     <wire from="(780,280)" to="(810,280)"/>
     <wire from="(820,270)" to="(820,290)"/>
@@ -212,7 +183,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(590,330)" to="(590,340)"/>
     <wire from="(760,310)" to="(760,320)"/>
     <wire from="(900,290)" to="(930,290)"/>
-    <wire from="(500,360)" to="(510,360)"/>
     <wire from="(820,270)" to="(900,270)"/>
     <wire from="(770,310)" to="(770,330)"/>
     <wire from="(440,300)" to="(500,300)"/>
@@ -225,7 +195,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(620,300)" to="(670,300)"/>
     <wire from="(950,310)" to="(950,330)"/>
     <wire from="(410,340)" to="(410,350)"/>
-    <wire from="(500,360)" to="(500,370)"/>
     <wire from="(530,350)" to="(530,370)"/>
     <wire from="(990,300)" to="(990,310)"/>
     <wire from="(810,260)" to="(810,280)"/>
@@ -254,6 +223,7 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(610,320)" to="(610,340)"/>
     <wire from="(440,310)" to="(500,310)"/>
     <wire from="(540,300)" to="(590,300)"/>
+    <wire from="(510,350)" to="(510,420)"/>
     <wire from="(300,300)" to="(340,300)"/>
     <wire from="(780,300)" to="(840,300)"/>
     <wire from="(960,300)" to="(990,300)"/>
@@ -278,11 +248,11 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(630,260)" to="(690,260)"/>
     <wire from="(870,300)" to="(930,300)"/>
     <wire from="(930,320)" to="(930,330)"/>
+    <wire from="(960,280)" to="(990,280)"/>
     <wire from="(190,320)" to="(190,340)"/>
     <wire from="(750,320)" to="(760,320)"/>
     <wire from="(460,270)" to="(570,270)"/>
     <wire from="(490,240)" to="(510,240)"/>
-    <wire from="(510,350)" to="(510,360)"/>
     <wire from="(690,260)" to="(690,290)"/>
     <wire from="(640,270)" to="(640,290)"/>
     <comp lib="0" loc="(410,350)" name="Tunnel">
@@ -294,6 +264,11 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="facing" val="south"/>
       <a name="width" val="32"/>
       <a name="label" val="MBUF"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
+    <comp lib="0" loc="(1000,270)" name="Tunnel">
+      <a name="width" val="8"/>
+      <a name="label" val="MBUF OP"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp lib="0" loc="(220,490)" name="Pin">
@@ -312,11 +287,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="0" loc="(180,490)" name="Pin">
       <a name="facing" val="south"/>
       <a name="tristate" val="false"/>
-    </comp>
-    <comp lib="0" loc="(70,610)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="LD REG"/>
-      <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp lib="2" loc="(210,300)" name="Multiplexer">
       <a name="width" val="32"/>
@@ -342,6 +312,15 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="CK"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
+    <comp lib="0" loc="(490,480)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="width" val="8"/>
+      <a name="label" val="MBUF OP"/>
+      <a name="labelfont" val="Dialog plain 10"/>
+    </comp>
+    <comp loc="(470,420)" name="Opcode Dissector">
+      <a name="facing" val="north"/>
+    </comp>
     <comp lib="0" loc="(260,340)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="CK"/>
@@ -356,10 +335,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="4" loc="(280,300)" name="Register">
       <a name="width" val="32"/>
       <a name="label" val="PC"/>
-    </comp>
-    <comp lib="0" loc="(70,580)" name="Pin">
-      <a name="facing" val="south"/>
-      <a name="tristate" val="false"/>
     </comp>
     <comp lib="0" loc="(430,350)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -432,11 +407,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="0" loc="(1000,290)" name="Tunnel">
       <a name="width" val="4"/>
       <a name="label" val="REG DST"/>
-      <a name="labelfont" val="Dialog plain 10"/>
-    </comp>
-    <comp lib="0" loc="(500,370)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="LD REG"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
     <comp loc="(620,280)" name="DBUF"/>
@@ -1013,6 +983,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(420,150)" to="(530,150)"/>
     <wire from="(280,180)" to="(370,180)"/>
     <wire from="(460,190)" to="(460,240)"/>
+    <comp loc="(440,100)" name="Opcode Dissector">
+      <a name="facing" val="south"/>
+    </comp>
     <comp lib="1" loc="(440,250)" name="NOT Gate">
       <a name="width" val="32"/>
       <a name="size" val="20"/>
@@ -1052,9 +1025,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="1" loc="(420,250)" name="AND Gate">
       <a name="width" val="32"/>
       <a name="inputs" val="2"/>
-    </comp>
-    <comp loc="(440,100)" name="Opcode Dissector">
-      <a name="facing" val="south"/>
     </comp>
     <comp lib="0" loc="(230,330)" name="Pin">
       <a name="width" val="32"/>
@@ -1690,10 +1660,17 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <circ-port height="8" pin="420,380" width="8" x="56" y="76"/>
       <circ-anchor facing="east" height="6" width="6" x="77" y="57"/>
     </appear>
-    <wire from="(490,290)" to="(620,290)"/>
-    <wire from="(170,300)" to="(210,300)"/>
-    <wire from="(420,330)" to="(420,380)"/>
+    <wire from="(440,350)" to="(440,360)"/>
+    <wire from="(330,310)" to="(330,380)"/>
+    <wire from="(330,310)" to="(350,310)"/>
+    <wire from="(380,330)" to="(380,360)"/>
+    <wire from="(300,380)" to="(330,380)"/>
     <wire from="(230,290)" to="(350,290)"/>
+    <wire from="(380,360)" to="(380,380)"/>
+    <wire from="(490,290)" to="(620,290)"/>
+    <wire from="(420,330)" to="(420,380)"/>
+    <wire from="(170,300)" to="(210,300)"/>
+    <wire from="(380,360)" to="(440,360)"/>
     <wire from="(230,300)" to="(230,310)"/>
     <comp lib="0" loc="(170,300)" name="Pin">
       <a name="width" val="32"/>
@@ -1710,6 +1687,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="addrWidth" val="24"/>
       <a name="dataWidth" val="32"/>
       <a name="bus" val="separate"/>
+    </comp>
+    <comp lib="0" loc="(300,380)" name="Constant">
+      <a name="width" val="32"/>
+      <a name="value" val="0x0"/>
     </comp>
     <comp lib="0" loc="(620,290)" name="Pin">
       <a name="facing" val="west"/>
@@ -1759,6 +1740,14 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="bit30" val="1"/>
       <a name="bit31" val="1"/>
     </comp>
+    <comp lib="1" loc="(440,330)" name="NOT Gate">
+      <a name="facing" val="north"/>
+      <a name="size" val="20"/>
+    </comp>
+    <comp lib="0" loc="(380,380)" name="Constant">
+      <a name="facing" val="north"/>
+      <a name="value" val="0x0"/>
+    </comp>
   </circuit>
   <circuit name="Opcode Dissector">
     <a name="circuit" val="Opcode Dissector"/>
@@ -1771,30 +1760,48 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <circ-port height="10" pin="550,260" width="10" x="75" y="65"/>
       <circ-port height="10" pin="550,300" width="10" x="75" y="75"/>
       <circ-port height="10" pin="550,340" width="10" x="75" y="85"/>
-      <circ-port height="10" pin="550,380" width="10" x="75" y="95"/>
       <circ-port height="8" pin="180,310" width="8" x="46" y="76"/>
+      <circ-port height="10" pin="550,370" width="10" x="75" y="95"/>
+      <circ-port height="10" pin="550,400" width="10" x="75" y="105"/>
       <circ-anchor facing="east" height="6" width="6" x="77" y="57"/>
     </appear>
     <wire from="(320,330)" to="(370,330)"/>
     <wire from="(370,260)" to="(370,300)"/>
     <wire from="(320,300)" to="(370,300)"/>
+    <wire from="(400,360)" to="(420,360)"/>
+    <wire from="(370,330)" to="(370,370)"/>
+    <wire from="(400,370)" to="(400,400)"/>
     <wire from="(380,340)" to="(550,340)"/>
     <wire from="(320,320)" to="(380,320)"/>
+    <wire from="(370,370)" to="(380,370)"/>
+    <wire from="(400,400)" to="(550,400)"/>
     <wire from="(360,210)" to="(360,290)"/>
     <wire from="(380,300)" to="(550,300)"/>
     <wire from="(360,210)" to="(550,210)"/>
+    <wire from="(420,370)" to="(550,370)"/>
     <wire from="(370,260)" to="(550,260)"/>
     <wire from="(180,310)" to="(300,310)"/>
     <wire from="(380,320)" to="(380,340)"/>
-    <wire from="(370,380)" to="(550,380)"/>
+    <wire from="(420,360)" to="(420,370)"/>
     <wire from="(320,310)" to="(380,310)"/>
     <wire from="(380,300)" to="(380,310)"/>
     <wire from="(320,290)" to="(360,290)"/>
-    <wire from="(370,330)" to="(370,380)"/>
     <comp lib="0" loc="(550,260)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="label" val="USE IMMEDIATE"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(550,400)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="EXTRA"/>
+      <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="0" loc="(550,370)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="LD REG"/>
       <a name="labelloc" val="east"/>
     </comp>
     <comp lib="0" loc="(550,340)" name="Pin">
@@ -1810,12 +1817,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="USE PC"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="0" loc="(550,380)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-      <a name="width" val="2"/>
-      <a name="label" val="EXTRA"/>
-      <a name="labelloc" val="east"/>
+    <comp lib="0" loc="(380,370)" name="Splitter">
+      <a name="appear" val="center"/>
+      <a name="bit0" val="1"/>
+      <a name="bit1" val="0"/>
     </comp>
     <comp lib="0" loc="(180,310)" name="Pin">
       <a name="width" val="8"/>
@@ -1896,6 +1901,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="PASS"/>
       <a name="labelfont" val="Dialog plain 10"/>
     </comp>
+    <comp loc="(710,220)" name="Opcode Dissector">
+      <a name="facing" val="south"/>
+    </comp>
     <comp lib="0" loc="(600,250)" name="Tunnel">
       <a name="facing" val="south"/>
       <a name="width" val="32"/>
@@ -1965,9 +1973,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="8"/>
       <a name="label" val="TRASH"/>
       <a name="labelfont" val="Dialog plain 10"/>
-    </comp>
-    <comp loc="(710,220)" name="Opcode Dissector">
-      <a name="facing" val="south"/>
     </comp>
     <comp lib="2" loc="(700,290)" name="Multiplexer">
       <a name="selloc" val="tr"/>
