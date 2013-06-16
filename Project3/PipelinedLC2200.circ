@@ -91,8 +91,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
   </lib>
   <lib desc="#Memory" name="4">
     <tool name="Register">
-      <a name="width" val="1"/>
-      <a name="label" val="JALR"/>
+      <a name="width" val="2"/>
+      <a name="label" val="B/RP"/>
     </tool>
     <tool name="RAM">
       <a name="addrWidth" val="24"/>
@@ -136,8 +136,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     </tool>
     <sep/>
     <tool lib="0" name="Pin">
+      <a name="facing" val="north"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="FEEDBACK IN"/>
       <a name="labelloc" val="north"/>
     </tool>
     <tool lib="0" name="Pin">
@@ -1923,7 +1923,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <circ-anchor facing="east" height="6" width="6" x="87" y="57"/>
     </appear>
     <wire from="(130,370)" to="(170,370)"/>
-    <wire from="(470,460)" to="(540,460)"/>
     <wire from="(520,430)" to="(530,430)"/>
     <wire from="(380,90)" to="(400,90)"/>
     <wire from="(210,50)" to="(210,70)"/>
@@ -1936,14 +1935,15 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(510,550)" to="(530,550)"/>
     <wire from="(250,60)" to="(270,60)"/>
     <wire from="(520,420)" to="(520,430)"/>
+    <wire from="(520,190)" to="(530,190)"/>
     <wire from="(660,190)" to="(660,320)"/>
     <wire from="(260,100)" to="(270,100)"/>
     <wire from="(850,220)" to="(870,220)"/>
     <wire from="(240,70)" to="(250,70)"/>
     <wire from="(430,90)" to="(430,100)"/>
+    <wire from="(470,460)" to="(530,460)"/>
     <wire from="(590,510)" to="(590,520)"/>
     <wire from="(560,310)" to="(670,310)"/>
-    <wire from="(510,440)" to="(530,440)"/>
     <wire from="(100,250)" to="(120,250)"/>
     <wire from="(240,90)" to="(260,90)"/>
     <wire from="(150,250)" to="(150,270)"/>
@@ -1975,6 +1975,7 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(650,230)" to="(760,230)"/>
     <wire from="(550,560)" to="(550,590)"/>
     <wire from="(550,410)" to="(590,410)"/>
+    <wire from="(530,460)" to="(540,460)"/>
     <wire from="(680,220)" to="(760,220)"/>
     <wire from="(550,160)" to="(550,170)"/>
     <wire from="(800,220)" to="(810,220)"/>
@@ -1989,7 +1990,6 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(90,380)" to="(90,390)"/>
     <wire from="(410,60)" to="(410,70)"/>
     <wire from="(590,400)" to="(590,410)"/>
-    <wire from="(510,190)" to="(530,190)"/>
     <wire from="(520,530)" to="(520,540)"/>
     <wire from="(470,460)" to="(470,580)"/>
     <wire from="(480,570)" to="(480,580)"/>
@@ -2023,8 +2023,8 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(120,190)" to="(120,250)"/>
     <wire from="(540,450)" to="(540,460)"/>
     <wire from="(460,330)" to="(540,330)"/>
-    <wire from="(530,210)" to="(530,220)"/>
     <wire from="(510,310)" to="(530,310)"/>
+    <wire from="(530,210)" to="(530,220)"/>
     <wire from="(470,620)" to="(470,630)"/>
     <wire from="(710,550)" to="(710,600)"/>
     <wire from="(560,300)" to="(670,300)"/>
@@ -2046,8 +2046,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(150,240)" to="(210,240)"/>
     <wire from="(670,210)" to="(670,300)"/>
     <wire from="(170,440)" to="(180,440)"/>
+    <wire from="(520,440)" to="(530,440)"/>
     <wire from="(540,320)" to="(540,330)"/>
     <wire from="(80,360)" to="(100,360)"/>
+    <wire from="(510,440)" to="(520,440)"/>
     <wire from="(530,210)" to="(540,210)"/>
     <wire from="(520,290)" to="(520,300)"/>
     <wire from="(170,370)" to="(190,370)"/>
@@ -2058,6 +2060,7 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <wire from="(160,460)" to="(180,460)"/>
     <wire from="(480,570)" to="(540,570)"/>
     <wire from="(820,350)" to="(830,350)"/>
+    <wire from="(510,190)" to="(520,190)"/>
     <wire from="(220,450)" to="(270,450)"/>
     <wire from="(670,330)" to="(760,330)"/>
     <wire from="(170,370)" to="(170,440)"/>
@@ -2406,54 +2409,76 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(380,310)" to="(410,310)"/>
-    <wire from="(300,390)" to="(410,390)"/>
+    <wire from="(210,210)" to="(220,210)"/>
+    <wire from="(210,390)" to="(210,490)"/>
     <wire from="(540,280)" to="(540,390)"/>
+    <wire from="(170,500)" to="(170,580)"/>
     <wire from="(520,260)" to="(520,400)"/>
-    <wire from="(390,400)" to="(410,400)"/>
-    <wire from="(530,300)" to="(530,410)"/>
+    <wire from="(140,220)" to="(140,580)"/>
     <wire from="(290,580)" to="(370,580)"/>
-    <wire from="(440,210)" to="(520,210)"/>
-    <wire from="(400,500)" to="(400,560)"/>
     <wire from="(700,280)" to="(840,280)"/>
-    <wire from="(370,220)" to="(370,560)"/>
-    <wire from="(300,210)" to="(300,300)"/>
-    <wire from="(470,590)" to="(470,620)"/>
+    <wire from="(400,500)" to="(400,560)"/>
     <wire from="(360,610)" to="(390,610)"/>
     <wire from="(370,220)" to="(410,220)"/>
     <wire from="(400,500)" to="(410,500)"/>
     <wire from="(550,290)" to="(660,290)"/>
-    <wire from="(540,280)" to="(660,280)"/>
+    <wire from="(210,490)" to="(220,490)"/>
     <wire from="(300,210)" to="(410,210)"/>
-    <wire from="(300,130)" to="(300,210)"/>
-    <wire from="(520,260)" to="(660,260)"/>
-    <wire from="(530,130)" to="(530,160)"/>
     <wire from="(550,430)" to="(660,430)"/>
-    <wire from="(680,190)" to="(680,260)"/>
     <wire from="(360,610)" to="(360,620)"/>
-    <wire from="(300,490)" to="(410,490)"/>
+    <wire from="(150,310)" to="(150,580)"/>
     <wire from="(540,420)" to="(660,420)"/>
+    <wire from="(300,490)" to="(410,490)"/>
     <wire from="(440,390)" to="(540,390)"/>
     <wire from="(530,270)" to="(530,300)"/>
     <wire from="(520,400)" to="(660,400)"/>
     <wire from="(440,490)" to="(550,490)"/>
     <wire from="(300,390)" to="(300,490)"/>
     <wire from="(440,300)" to="(530,300)"/>
-    <wire from="(530,410)" to="(660,410)"/>
     <wire from="(530,270)" to="(660,270)"/>
+    <wire from="(530,410)" to="(660,410)"/>
+    <wire from="(140,220)" to="(220,220)"/>
     <wire from="(390,400)" to="(390,560)"/>
-    <wire from="(390,600)" to="(390,610)"/>
-    <wire from="(520,210)" to="(520,260)"/>
-    <wire from="(100,250)" to="(120,250)"/>
-    <wire from="(300,300)" to="(300,390)"/>
-    <wire from="(550,290)" to="(550,430)"/>
-    <wire from="(300,300)" to="(410,300)"/>
+    <wire from="(210,300)" to="(220,300)"/>
+    <wire from="(210,300)" to="(210,390)"/>
     <wire from="(380,310)" to="(380,560)"/>
+    <wire from="(300,300)" to="(410,300)"/>
     <wire from="(700,420)" to="(840,420)"/>
     <wire from="(680,440)" to="(680,500)"/>
+    <wire from="(170,500)" to="(220,500)"/>
     <wire from="(550,430)" to="(550,490)"/>
-    <wire from="(100,360)" to="(120,360)"/>
     <wire from="(540,390)" to="(540,420)"/>
+    <wire from="(300,390)" to="(410,390)"/>
+    <wire from="(380,310)" to="(410,310)"/>
+    <wire from="(210,390)" to="(220,390)"/>
+    <wire from="(390,400)" to="(410,400)"/>
+    <wire from="(530,300)" to="(530,410)"/>
+    <wire from="(160,400)" to="(160,580)"/>
+    <wire from="(80,600)" to="(140,600)"/>
+    <wire from="(440,210)" to="(520,210)"/>
+    <wire from="(370,220)" to="(370,560)"/>
+    <wire from="(300,210)" to="(300,300)"/>
+    <wire from="(470,590)" to="(470,620)"/>
+    <wire from="(160,620)" to="(160,640)"/>
+    <wire from="(540,280)" to="(660,280)"/>
+    <wire from="(300,130)" to="(300,210)"/>
+    <wire from="(530,130)" to="(530,160)"/>
+    <wire from="(520,260)" to="(660,260)"/>
+    <wire from="(680,190)" to="(680,260)"/>
+    <wire from="(520,210)" to="(520,260)"/>
+    <wire from="(390,600)" to="(390,610)"/>
+    <wire from="(150,310)" to="(220,310)"/>
+    <wire from="(300,300)" to="(300,390)"/>
+    <wire from="(70,150)" to="(90,150)"/>
+    <wire from="(160,400)" to="(220,400)"/>
+    <wire from="(550,290)" to="(550,430)"/>
+    <wire from="(210,210)" to="(210,300)"/>
+    <wire from="(210,130)" to="(210,210)"/>
+    <wire from="(70,40)" to="(90,40)"/>
+    <comp lib="4" loc="(250,490)" name="Register">
+      <a name="width" val="2"/>
+      <a name="label" val="B/RP"/>
+    </comp>
     <comp lib="4" loc="(440,390)" name="Register">
       <a name="width" val="32"/>
     </comp>
@@ -2469,6 +2494,16 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="2"/>
       <a name="label" val="DST REG"/>
     </comp>
+    <comp lib="0" loc="(230,320)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
+    <comp lib="2" loc="(160,620)" name="Demultiplexer">
+      <a name="facing" val="north"/>
+      <a name="select" val="2"/>
+      <a name="disabled" val="0"/>
+      <a name="enable" val="false"/>
+    </comp>
     <comp lib="0" loc="(470,590)" name="Tunnel">
       <a name="facing" val="south"/>
       <a name="label" val="CK"/>
@@ -2479,6 +2514,15 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="disabled" val="0"/>
       <a name="enable" val="false"/>
     </comp>
+    <comp lib="4" loc="(250,210)" name="Register">
+      <a name="width" val="2"/>
+      <a name="label" val="B/RP"/>
+    </comp>
+    <comp lib="0" loc="(70,150)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="REG B"/>
+    </comp>
     <comp lib="0" loc="(420,410)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="CK"/>
@@ -2486,14 +2530,12 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="4" loc="(440,490)" name="Register">
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(100,360)" name="Pin">
+    <comp lib="0" loc="(210,130)" name="Pin">
+      <a name="facing" val="south"/>
       <a name="width" val="2"/>
       <a name="tristate" val="false"/>
-      <a name="label" val="REG B"/>
-    </comp>
-    <comp lib="0" loc="(120,250)" name="Tunnel">
-      <a name="width" val="2"/>
-      <a name="label" val="REG A"/>
+      <a name="label" val="BRP IN"/>
+      <a name="labelloc" val="north"/>
     </comp>
     <comp lib="2" loc="(390,600)" name="Demultiplexer">
       <a name="facing" val="north"/>
@@ -2506,6 +2548,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="width" val="2"/>
       <a name="label" val="DST REG"/>
     </comp>
+    <comp lib="0" loc="(230,230)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
     <comp lib="0" loc="(300,130)" name="Pin">
       <a name="facing" val="south"/>
       <a name="width" val="32"/>
@@ -2513,10 +2559,9 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="DATA IN"/>
       <a name="labelloc" val="north"/>
     </comp>
-    <comp lib="0" loc="(100,250)" name="Pin">
-      <a name="width" val="2"/>
-      <a name="tristate" val="false"/>
-      <a name="label" val="REG A"/>
+    <comp lib="0" loc="(230,510)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
     </comp>
     <comp lib="0" loc="(360,620)" name="Pin">
       <a name="facing" val="north"/>
@@ -2538,6 +2583,16 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="tristate" val="false"/>
       <a name="label" val="CK"/>
     </comp>
+    <comp lib="0" loc="(90,40)" name="Tunnel">
+      <a name="width" val="2"/>
+      <a name="label" val="REG A"/>
+    </comp>
+    <comp lib="0" loc="(160,640)" name="Pin">
+      <a name="facing" val="north"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="WE BRP"/>
+      <a name="labelloc" val="south"/>
+    </comp>
     <comp lib="0" loc="(840,420)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
@@ -2546,16 +2601,17 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="OUT B"/>
       <a name="labelloc" val="east"/>
     </comp>
+    <comp lib="0" loc="(70,40)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="REG A"/>
+    </comp>
     <comp lib="2" loc="(700,280)" name="Multiplexer">
       <a name="selloc" val="tr"/>
       <a name="select" val="2"/>
       <a name="width" val="32"/>
       <a name="disabled" val="0"/>
       <a name="enable" val="false"/>
-    </comp>
-    <comp lib="0" loc="(120,360)" name="Tunnel">
-      <a name="width" val="2"/>
-      <a name="label" val="REG B"/>
     </comp>
     <comp lib="0" loc="(680,190)" name="Tunnel">
       <a name="facing" val="south"/>
@@ -2574,6 +2630,24 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
       <a name="label" val="OUT A"/>
       <a name="labelloc" val="east"/>
     </comp>
+    <comp lib="0" loc="(80,600)" name="Pin">
+      <a name="width" val="2"/>
+      <a name="tristate" val="false"/>
+      <a name="label" val="BRP REG"/>
+      <a name="labelloc" val="south"/>
+    </comp>
+    <comp lib="4" loc="(250,390)" name="Register">
+      <a name="width" val="2"/>
+      <a name="label" val="B/RP"/>
+    </comp>
+    <comp lib="0" loc="(90,150)" name="Tunnel">
+      <a name="width" val="2"/>
+      <a name="label" val="REG B"/>
+    </comp>
+    <comp lib="0" loc="(230,410)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="CK"/>
+    </comp>
     <comp lib="0" loc="(680,500)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="width" val="2"/>
@@ -2582,6 +2656,10 @@ This file is intended to be loaded by Brandonsim.  Distributed as part of CS2110
     <comp lib="0" loc="(420,510)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="CK"/>
+    </comp>
+    <comp lib="4" loc="(250,300)" name="Register">
+      <a name="width" val="2"/>
+      <a name="label" val="B/RP"/>
     </comp>
   </circuit>
   <circuit name="I-MEM">
