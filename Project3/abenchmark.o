@@ -1,43 +1,43 @@
-C2 e initsp      0x29   ! initialize the stack pointer
-46 e 0(e)                ! finish initialization
-C2 $a0 BASE        0x08   !load base for pow
-46 $a0 0($a0)
-C2 $a1 EXP         0x07   !load power for pow
-46 $a1 0($a1)
-C2 d POW         0x07   !load address of pow
-33 d f                 !run pow
-C2 $a0 ANS         0x04   !load base for pow
-48 $v0 0($a0)
+C2 e initsp      0x29   
+46 e e 0                
+C2 1 BASE        0x08   
+46 1 1 0
+C2 2 EXP         0x07   
+46 2 2 0
+C2 d POW         0x07   
+33 d f                 
+C2 1 ANS         0x04   
+48 a 1 0
 ff        
 BASE: .fill 2
 EXP: .fill 16
-ANS: .fill 0                    ! should come out to 65536
-42 e e 2                      ! push 2 slots onto the stack
-48 f -1(e)                       ! save RA to stack
-48 $a0 -2(e)                       ! save arg 0 to stack
-21 0 $a1 RET1        0x0B      ! if the power is 0 return 1
-21 0 $a0 RET0        0x0D      ! if the base is 0 return 0
-42 $a1 $a1 -1                     ! decrement the power
-42 d 0 POW        0x0E      ! load the address of POW
-33 d f                         ! recursively call POW
-02 $a0 $v0 0                   ! store return value in arg 1
-46 $a1 -2(e)                       ! load the base into arg 0
-42 d 0 MULT       0x23      ! load the address of MULT
-33 d f                         ! multiply arg 0 (base) and arg 1 (running product)
-46 f -1(e)                       ! load RA from the stack
-42 e e -2                     ! pop the RA and arg 0 off the stack
-33 f 0                       ! return
-RET1: 42 $v0 0 1               ! return a value of 1
+ANS: .fill 0                    
+42 e e 2                      
+48 f e -1                       
+48 1 e -2                       
+21 0 2 RET1        0x0B      
+21 0 1 RET0        0x0D      
+42 2 2 -1                     
+42 d 0 POW        0x0E      
+33 d f                         
+02 1 a 0                   
+46 2 e -2                       
+42 d 0 MULT       0x23      
+33 d f                         
+46 f e -1                       
+42 e e -2                     
+33 f 0                       
+RET1: 42 a 0 1               
 42 e e -2
 33 f 0
-RET0: 02 $v0 0 0            ! return a value of 0
+RET0: 02 a 0 0            
 42 e e -2
 33 f 0                
-MULT: 02 $v0 0 0            ! zero out return value
-AGAIN: 02 $v0$v0 $a0                ! multiply loop
-12 $a2 0 0
-02 $a1 $a1 $a2
-21 $a1 0 DONE        0x01      ! finished multiplying
-21 0 0 AGAIN     0xFB (-5) ! loop again
+MULT: 02 a 0 0            
+AGAIN: 02 aa 1                
+12 3 0 0
+02 2 2 3
+21 2 0 DONE        0x01      
+21 0 0 AGAIN     0xFB (-5) 
 DONE: 33 f 0        
 initsp: .fill 0xA00000
