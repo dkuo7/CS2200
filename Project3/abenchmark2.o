@@ -1,43 +1,43 @@
 C2 e0 00 29   
 46 ee 00 00                
-C2 1 BASE        0x08   
-46 1 1 0
-C2 2 EXP         0x07   
-46 2 2 0
-C2 d POW         0x07   
-33 d f                 
-C2 1 ANS         0x04   
-48 a 1 0
-ff        
-BASE: .fill 2
-EXP: .fill 16
-ANS: .fill 0                    
-42 e e 2                      
-48 f e -1                       
-48 1 e -2                       
-21 0 2 RET1        0x0B      
-21 0 1 RET0        0x0D      
-42 2 2 -1                     
-42 d 0 POW        0x0E      
-33 d f                         
-02 1 a 0                   
-46 2 e -2                       
-42 d 0 MULT       0x23      
-33 d f                         
-46 f e -1                       
-42 e e -2                     
-33 f 0                       
-RET1: 42 a 0 1               
-42 e e -2
-33 f 0
-RET0: 02 a 0 0            
-42 e e -2
-33 f 0                
-MULT: 02 a 0 0            
-AGAIN: 02 aa 1                
-12 3 0 0
-02 2 2 3
-21 2 0 DONE        0x01      
-21 0 0 AGAIN     0xFB (-5) 
-DONE: 33 f 0        
-initsp: .fill 0xA00000
+C2 10 00 08   
+46 11 00 00
+C2 20 00 07   
+46 22 00 00
+C2 d0 00 07   
+33 fd 00 00                
+C2 10 00 04   
+48 a1 00 00
+ff ff ff ff     
+00 00 00 02
+00 00 00 10
+00 00 00 00              
+42 ee 00 02                      
+48 fe ff ff                       
+48 1e ff fe                       
+21 02 00 0B      
+21 01 00 0D      
+42 22 ff ff                     
+42 d0 00 0E      
+33 fd 00 00                         
+02 1a 00 00                   
+46 2e ff fe                       
+42 d0 00 23      
+33 fd 00 00                   
+46 fe ff ff                       
+42 ee ff fe                     
+33 0f 00 00                       
+42 a0 00 01               
+42 ee ff fe
+33 0f 00 00
+02 a0 00 00            
+42 ee ff fe
+33 0f 00 00                
+02 a0 00 00            
+02 aa 10 00                
+12 30 00 00
+02 22 30 00
+21 20 00 01      
+21 00 FF FB 
+33 0f 00 00        
+00 A0 00 00
