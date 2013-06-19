@@ -14,6 +14,10 @@ $v# are return value registers
 $a# are argument registers
 $zero is the register which is hard wired to be 0
 
+improvements:
+-data forwarding
+-don't stall if writing to $zero
+
 main:                            Imm (assuming 8 bit, please sign extend)
 00        ldadr $sp, initsp      0x29   ! initialize the stack pointer
 01        lw $sp, 0($sp)                ! finish initialization
@@ -24,6 +28,7 @@ main:                            Imm (assuming 8 bit, please sign extend)
 05        lw $a1, 0($a1)
 06        ldadr $at, POW         0x07   !load address of pow
 07        jalr $at, $ra                 !run pow
+CHKPOINT: R1=2,R2=16,R13=0E,R15=08 
 08        ldadr $a0, ANS         0x04   !load base for pow
 09        sw $v0, 0($a0)
                 
@@ -32,7 +37,7 @@ main:                            Imm (assuming 8 bit, please sign extend)
 0B        BASE: .fill 2
 0C        EXP: .fill 16
 0D        ANS: .fill 0                    ! should come out to 65536
-        
+       
 POW: 
 0E  addi $sp, $sp, 2                      ! push 2 slots onto the stack
 0F  sw $ra, -1($sp)                       ! save RA to stack
@@ -55,9 +60,8 @@ POW:
 20 RET0: add $v0, $zero, $zero            ! return a value of 0
 21  addi $sp, $sp, -2
 22  jalr $ra, $zero                
-        
 23 MULT: add $v0, $zero, $zero            ! zero out return value
-24 AGAIN: add $v0,$v0, $a0                ! multiply loop
+24 AGAIN: add $v0,$v0, $a0                ! multiply loop, a0 * a1
 25  nand $a2, $zero, $zero
 26  add $a1, $a1, $a2
 27  beq $a1, $zero, DONE        0x01      ! finished multiplying
