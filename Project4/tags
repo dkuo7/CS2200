@@ -1,0 +1,111 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+ALL	Makefile	/^ALL = vm-sim$/;"	m
+ALL_OBJS	Makefile	/^ALL_OBJS = $(STUDENT_OBJS:%.o=$(STUDENT)\/%.o) \\$/;"	m
+CC	Makefile	/^CC      = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS  = $(OPTIONS) -Wall -ansi -pedantic -pipe -Werror$/;"	m
+CPU_NUM_FRAMES	simulator-src/pagetable.h	48;"	d
+CPU_NUM_PTE	simulator-src/pagetable.h	43;"	d
+DISK_ACCESS_TIME	student-src/emat.c	4;"	d	file:
+ERROR	simulator-src/useful.h	11;"	d
+HELP_STR	simulator-src/sim.c	37;"	d	file:
+MEMORY_ACCESS_TIME	student-src/emat.c	3;"	d	file:
+OPTIONS	Makefile	/^OPTIONS = -O2 -I$(STUDENT) -I$(SIMULATOR) # Production options$/;"	m
+PERROR	simulator-src/useful.h	16;"	d
+PRJ3_USEFUL_H	simulator-src/useful.h	5;"	d
+SIMULATOR	Makefile	/^SIMULATOR = simulator-src$/;"	m
+SIMULATOR_OBJS	Makefile	/^SIMULATOR_OBJS = global.o \\$/;"	m
+STUDENT	Makefile	/^STUDENT   = student-src$/;"	m
+STUDENT_OBJS	Makefile	/^STUDENT_OBJS = page-fault.o \\$/;"	m
+SUBMIT	Makefile	/^SUBMIT  = $(STUDENT) $(SIMULATOR) Makefile references$/;"	m
+USAGE	simulator-src/sim.c	49;"	d	file:
+VADDR_OFFSET	student-src/page-splitting.h	26;"	d
+VADDR_PAGENUM	student-src/page-splitting.h	19;"	d
+WHITESPACE	simulator-src/sim.c	54;"	d	file:
+_GLOBAL_H_	simulator-src/global.h	2;"	d
+_GNU_SOURCE	simulator-src/sim.c	13;"	d	file:
+_MEMORY_H_	simulator-src/memory.h	2;"	d
+_PAGETABLE_H_	simulator-src/pagetable.h	2;"	d
+_PROCESS_H_	simulator-src/process.h	2;"	d
+_STASTICS_H_	simulator-src/statistics.h	2;"	d
+_STUDENT_PAGE_SPLITTING_H_	student-src/page-splitting.h	2;"	d
+_SWAPFILE_H_	simulator-src/swapfile.h	2;"	d
+_TLB_H_	simulator-src/tlb.h	2;"	d
+_TYPES_H_	simulator-src/types.h	2;"	d
+compute_emat	student-src/emat.c	/^double compute_emat() {$/;"	f
+count_diskaccesses	simulator-src/statistics.c	/^unsigned long int count_diskaccesses = 0;$/;"	v
+count_pagefaults	simulator-src/statistics.c	/^unsigned long int count_pagefaults = 0;$/;"	v
+count_reads	simulator-src/statistics.c	/^unsigned long int count_reads = 0;$/;"	v
+count_tlbhits	simulator-src/statistics.c	/^unsigned long int count_tlbhits = 0;$/;"	v
+count_writes	simulator-src/statistics.c	/^unsigned long int count_writes = 0;$/;"	v
+current	simulator-src/process.c	/^pcb_t* current;$/;"	v
+current_pagetable	simulator-src/pagetable.c	/^pte_t   *current_pagetable; \/* CPU page register *\/$/;"	v
+data	simulator-src/swapfile.c	/^   unsigned char *data;    \/* Saved page data *\/$/;"	m	struct:swap_page	file:
+dirty	simulator-src/pagetable.h	/^  unsigned char dirty;  \/* Dirty 'bit' *\/$/;"	m	struct:__anon4
+dirty	simulator-src/tlb.h	/^  uint8_t dirty; \/* Dirty 'bit' *\/$/;"	m	struct:__anon1
+display_statistics	simulator-src/statistics.c	/^void display_statistics() {$/;"	f
+filename	simulator-src/sim.c	/^static char *filename;$/;"	v	file:
+get_free_frame	student-src/page-replacement.c	/^pfn_t get_free_frame(void) {$/;"	f
+main	simulator-src/sim.c	/^int main(int argc, char **argv) {$/;"	f
+max_jobs	simulator-src/process.c	/^unsigned max_jobs = 8;$/;"	v
+mem_free	simulator-src/memory.c	/^void mem_free(void) {$/;"	f
+mem_init	simulator-src/memory.c	/^void mem_init(void) {$/;"	f
+mem_load	simulator-src/memory.c	/^word_t mem_load(vaddr_t va) {$/;"	f
+mem_size	simulator-src/global.c	/^unsigned mem_size  = 16;$/;"	v
+mem_store	simulator-src/memory.c	/^void mem_store(vaddr_t va, word_t data) {$/;"	f
+memory	simulator-src/memory.c	/^uint8_t *memory;$/;"	v
+name	simulator-src/process.h	/^   char name[20];    \/* User-specified name of the process *\/$/;"	m	struct:__anon2
+next	simulator-src/swapfile.c	/^   struct swap_page *next; \/* Pointer to next saved page *\/$/;"	m	struct:swap_page	typeref:struct:swap_page::swap_page	file:
+paddr_t	simulator-src/types.h	/^typedef uint16_t paddr_t;$/;"	t
+page_from_disk	simulator-src/swapfile.c	/^void page_from_disk(pfn_t pfn, vpn_t vpn, int pid) {$/;"	f
+page_size	simulator-src/global.c	/^unsigned page_size = 2;$/;"	v
+page_to_disk	simulator-src/swapfile.c	/^void page_to_disk(pfn_t pfn, vpn_t vpn, int pid) {$/;"	f
+pagefault_handler	student-src/page-fault.c	/^pfn_t pagefault_handler(vpn_t request_vpn, int write) {$/;"	f
+pagetable	simulator-src/process.h	/^   pte_t *pagetable; \/* Process page table *\/$/;"	m	struct:__anon2
+pagetable_lookup	student-src/page-lookup.c	/^pfn_t pagetable_lookup(vpn_t vpn, int write) {$/;"	f
+pcb	simulator-src/process.h	/^   pcb_t *pcb; \/* process control block of the owning process*\/$/;"	m	struct:__anon3
+pcb_t	simulator-src/process.h	/^} pcb_t;$/;"	t	typeref:struct:__anon2
+pfn	simulator-src/pagetable.h	/^  pfn_t pfn;            \/* Physical frame number *\/$/;"	m	struct:__anon4
+pfn	simulator-src/tlb.h	/^  pfn_t pfn;     \/* Physical frame number *\/$/;"	m	struct:__anon1
+pfn_t	simulator-src/types.h	/^typedef uint16_t pfn_t;$/;"	t
+pid	simulator-src/process.h	/^   int pid;          \/* Process identifier *\/$/;"	m	struct:__anon2
+pid	simulator-src/swapfile.c	/^   int pid;                \/* Process identifier *\/$/;"	m	struct:swap_page	file:
+proc_fork	simulator-src/process.c	/^void proc_fork(int pid, const char *name) {$/;"	f
+proc_free	simulator-src/process.c	/^void proc_free(void) {$/;"	f
+proc_getname	simulator-src/process.c	/^const char *proc_getname(int pid) {$/;"	f
+proc_init	simulator-src/process.c	/^void proc_init(void) {$/;"	f
+proc_list	simulator-src/process.c	/^pcb_t* proc_list;$/;"	v
+proc_switch	simulator-src/process.c	/^void proc_switch(int pid) {$/;"	f
+progname	simulator-src/sim.c	/^static char *progname;$/;"	v	file:
+pte_t	simulator-src/pagetable.h	/^} pte_t;$/;"	t	typeref:struct:__anon4
+rlt	simulator-src/process.c	/^rlt_t* rlt;$/;"	v
+rlt_t	simulator-src/process.h	/^} rlt_t;$/;"	t	typeref:struct:__anon3
+sim_free	simulator-src/sim.c	/^void sim_free(void) {$/;"	f
+sim_init	simulator-src/sim.c	/^void sim_init(void) {$/;"	f
+sim_readdata	simulator-src/sim.c	/^void sim_readdata(void) {$/;"	f
+sim_setoptions	simulator-src/sim.c	/^void sim_setoptions(int argc, char **argv) {$/;"	f
+swap_page	simulator-src/swapfile.c	/^struct swap_page {$/;"	s	file:
+swapfile	simulator-src/swapfile.c	/^} *swapfile;              \/* Head of our global swapfile list *\/$/;"	v	typeref:struct:swap_page
+swapfile_free	simulator-src/swapfile.c	/^void swapfile_free(void) {$/;"	f
+tlb	simulator-src/tlb.c	/^tlbe_t* tlb;$/;"	v
+tlb_clearall	simulator-src/tlb.c	/^void tlb_clearall(void) {$/;"	f
+tlb_clearone	simulator-src/tlb.c	/^void tlb_clearone(vpn_t vpn) {$/;"	f
+tlb_free	simulator-src/tlb.c	/^void tlb_free(void) {$/;"	f
+tlb_init	simulator-src/tlb.c	/^void tlb_init(void) {$/;"	f
+tlb_lookup	student-src/tlb-lookup.c	/^pfn_t tlb_lookup(vpn_t vpn, int write) {$/;"	f
+tlb_size	simulator-src/global.c	/^unsigned tlb_size  = 4;$/;"	v
+tlbe_t	simulator-src/tlb.h	/^} tlbe_t;$/;"	t	typeref:struct:__anon1
+used	simulator-src/pagetable.h	/^  unsigned char used;   \/* Used (aka accessed recently) 'bit' *\/$/;"	m	struct:__anon4
+used	simulator-src/tlb.h	/^  uint8_t used;  \/* Used (aka recently accessed) 'bit' *\/$/;"	m	struct:__anon1
+vaddr_t	simulator-src/types.h	/^typedef uint16_t vaddr_t;$/;"	t
+valid	simulator-src/pagetable.h	/^  unsigned char valid;  \/* Valid 'bit' *\/$/;"	m	struct:__anon4
+valid	simulator-src/tlb.h	/^  uint8_t valid; \/* Valid 'bit' *\/$/;"	m	struct:__anon1
+vpn	simulator-src/process.h	/^   vpn_t  vpn; \/* virtual page number for the owning process this frame holds *\/$/;"	m	struct:__anon3
+vpn	simulator-src/swapfile.c	/^   vpn_t vpn;              \/* Virtual page number *\/$/;"	m	struct:swap_page	file:
+vpn	simulator-src/tlb.h	/^  vpn_t vpn;     \/* Virtual page number *\/$/;"	m	struct:__anon1
+vpn_t	simulator-src/types.h	/^typedef uint16_t vpn_t;$/;"	t
+word_t	simulator-src/types.h	/^typedef unsigned char word_t;$/;"	t

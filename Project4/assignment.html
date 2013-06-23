@@ -1,0 +1,572 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/st
+rict.dtd">
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>CS 2200 Summer 2013 Project 4 - Virtual Memory</title>
+  <style type="text/css">
+    table {
+      border: 1px solid black;
+    }
+    td, th {
+      border: 1px solid black;
+      padding: 3px 15px;
+    }
+  </style>
+</head>
+
+<body>
+<h1>CS 2200 Intro to Systems and Networks<br />
+Project 4 - Virtual Memory<br />
+Summer 2013 </h1>
+
+<h2>Introduction</h2>
+In this project you will implement a virtual memory system. You will be given a
+simulator that takes care of managing memory models, etc., but it has some parts
+missing. The project will walk you through the implementation of each of these
+parts step-by-step, asking questions about each step to make sure you understand
+what you have to do before you go off and write code.
+<br /><br />
+The implementation itself is fairly straightforward. If you find yourself
+struggling with the code, step back and think about what you are supposed to be
+doing in theory. If you don't understand how the step should work, it will be
+impossible to write it out in code.
+<br /><br />
+The assignment is organized into 6 steps, as follows:
+<ul>
+  <li>Step 1 - Split the Address [10 pts total]</li>
+  <li>Step 2 - Address Translation [20 pts total]</li>
+  <li>Step 3 - Computing the EMAT [10 pts total]</li>
+  <li>Step 4 - Handling Page Faults [20 pts total]</li>
+  <li>Step 5 - Improving Page Replacement [20 pts total]</li>
+  <li>Step 6 - Adding A TLB [20 pts total]</li>
+</ul>
+Each step starts with some theoretical questions. You <b>do not</b> have to
+submit answers to these questions. They are there to guide you. If you can
+answer the questions without much trouble, you will probably have an easy time
+with this assignment. As was mentioned earlier, the code will be really hard to
+write if you aren't comfortable with the concepts first. The questions are
+designed to prepare you for the coding in each step, so do them first.
+<br /><br />
+Apart form the questions part, there will be a part to implement in code. This
+will be described in the assignment, and will have FIXMEs (some with details if
+required) in the appropriate file. Code that you have to complete for this 
+assignment can be found in the files in the <code>student-src</code> directory,
+while the simulator code can be found in <code>simulator-src</code>. You
+probably shouldn't need to look at much (if any) of the simulator code aside
+from the files we tell you to modify. At the end of this file we have included
+an Appendix that discusses the simulator. It might be useful to read that if you
+are having trouble figuring out how to do something.
+<br /><br />
+
+<h3>Compiling/Running</h3>
+To recompile the simulator, we have provided a Makefile in the top level
+directory. This can be used to build the project by simply typing <i>make</i>.
+After you have built the program, you should find an executable named vm-sim
+in the top level directory. To run this program, you <b>must</b> specify a
+</i>references</i> file. A references file describes a series of memory
+accesses.  The directory <code>references</code> contains four different
+references files for your use:
+<ul>
+  <li><b>basic - </b>A basic references that yields no page faults <b>due to
+  eviction.</b></li>
+  <li><b>eviction - </b>A reference file that should produce a large number of
+  page faults.</li>
+  <li><b>tlb - </b>A reference file that should cause quite a few TLB hits.</li>
+  <li><b>everything - </b>A reference file that produces a little bit of
+  everything.</li>
+</ul>
+To run the simulator with a given references file, for example the
+<code>basic</code> file, issue the following command:
+<pre>
+$ ./vm-sim references/basic
+</pre>
+There are several other command line options for the simulator that you can play
+around with to adjust the memory size, page size and tlb size. You don't need to
+use them, but you can play around with different settings to see the effect that
+they have on the memory access time. The default settings, are a memory size of
+16 values, a page size of 2 values, and a tlb size of 4.
+<br /><br />
+<h2>Step 1 - Split the Address [10 pts]</h2>
+In modern virtual memory systems, the program written by the user accesses
+memory using virtual addresses. The hardware and operating system work together
+to translate these addresses into a physical address which can be used to access
+physical memory. The first step of this process is to take the virtual address
+and convert it into a physical address.
+<br /><br />
+Remember that a virtual address consists of two parts. The high-order bits make
+up the <i>virtual page number</i> (VPN), and the low-order bits make up the
+<i>offset</i>.
+<br />
+<br />
+<h3>Conceptual Questions</h3>
+On a certain machine, virtual addresses are made up of 16 bits. Each page on
+this machine has 2^8 addressable locations. Answer the following questions:
+<br />
+<br />
+<b>Question 1 - </b>How many bits must the offset be?
+<br />
+<b>Question 2 - </b>Recalling that the virtual address is split into the offset 
+and VPN, how many bits is the VPN?
+<br />
+<b>Question 3 - </b>What is the VPN given the address 0xBEEF?
+<br />
+<b>Question 4 - </b>What is the offset given the address 0xBEEF?
+<br />
+<h3>Implementation</h3>
+Look at file <code>page-splitting.h</code>. You should find two macros that are
+used by the simulator to split the address. They are named VADDR_PAGENUM and
+VADDR_OFFSET. They take a virtual address and return the page number or offset,
+respectively. They currently do not function correctly. Fix them so they
+properly return the virtual page number and offset.
+<br />
+<br />
+[Hint 1: Use the global variable page_size to access the size of a page]
+<br />
+[Hint 2: While your first instinct is probably to do this using bitwise
+arithmetic, it may make the implementation difficult. Think about using modulus
+and integer division. It should be possible to implement each macro in
+approximately one
+ line of code with either method.]
+<br /><br />
+<h2>Step 2 - Address Translation [20 pts total]</h2>
+Now that we can split the address, we are ready to translate the virtual address
+into a physical address. This requires a page table to store the mapping between
+virtual addresses and physical addresses. In the simulator, a page table is
+represented as an array of the following structure:
+<pre>
+typedef struct {
+   pfn_t pfn;           /* Physical frame number */
+   unsigned char valid; /* Valid 'bit' */
+   unsigned char dirty; /* Dirty 'bit' */
+   unsigned char used;  /* Used (aka accessed recently) */
+} pte_t;
+</pre>
+You'll notice, that the VPN doesn't appear as part of the page table. This is be
+cause the page table is an array of these entries. The index into the array corr
+esponds to the VPN. This allows the mapping from VPN to page table entry to be p
+erformed very easily.
+<h3>Conceptual Questions</h3>
+Most of address translation deals with reading values from the page table. The
+table below is similar in organization to the arrray of <code>pte_t</code>s
+that is used in the simulator, although the size of the VPN and PFN have been
+reduced to simplify the table. Assume that the page size is the same as that
+used in the questions on address splitting. Assume that any VPNs that do not
+appear in the table are <b>INVALID</b>.
+<br /><br />
+<table cellspacing="0" cellpadding="0">
+  <tr><th colspan=5> Page Table</th></tr>
+  <tr>
+    <th>VPN</th>
+    <th>PFN</th>
+    <th>valid</th>
+    <th>dirty</th>
+    <th>used</th>
+  </tr>
+  <tr>
+    <td> 0xDE </td>
+    <td> 0xBE </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+  <tr>
+    <td> 0xF0 </td>
+    <td> 0xD0 </td>
+    <td> YES </td>
+    <td> YES </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0xBE </td>
+    <td> 0x42 </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+  <tr>
+    <td> 0x42 </td>
+    <td> 0x43 </td>
+    <td> NO </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+  <tr>
+    <td> ...  </td>
+    <td> ---- </td>
+    <td> NO </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+</table>
+<br />
+<b>Question 5 - </b>What physical address is 0xDEAD mapped to?
+<br />
+<b>Question 6 - </b>What physical address is 0xF00D mapped to?
+<br />
+<b>Question 7 - </b>Is the address 0x42ED valid?
+<br />
+<br />
+<h3>Implementation</h3>
+After finishing the questions in the previous section, you should have a pretty
+good idea about how the page table is used when translating addresses. Open up
+the file <code>page-lookup.c</code>. In this file you will find a function
+called <code>pagetable_lookup</code>. Modify this function to behave correctly.
+Note that you will have to check to make sure the entry is valid. If it isn't,
+you should increment the variable <code>count_pagefaults</code> and call the
+function <code>pagefault_handler</code>.
+<br />
+When implementing address translation, keep in mind that the global variable
+<code>current_pagetable</code> is a pointer to an array of page table entries
+(<code>pte_t</code>), indexed by VPN.
+<br /><br />
+[Hint: You don't have to worry about marking the entry as dirty or used, or usin
+g the TLB. This is already done for you by the simulator. You do, however, need 
+to notify the page fault handler whether or not a write is required.]
+[Note: In the questions, you were asked to find the physical <i>address</i>. In 
+the function, you have to find the PFN. These are slightly different!]
+<br /><br />
+<h2>Step 3 - Computing the EMAT [10 pts total]</h2>
+Now that we are getting some results from our simulator, we are ready to perform
+some real computations with our results. The Estimated Memory Access Time, or
+EMAT, is computed by figuring out the average amount of time for each access.
+This gives us a measure of how much time each memory access takes on average.
+Keep in mind that this is highly influenced by the memory access patterns of the
+code you run.
+<br />
+<h3>Conceptual Questions</h3>
+<b>Question 8 - </b>Assuming a memory access time of 100ns, and that an average disk access takes 10ms, how long would it take to access memory 10 times if 2 of those accesses resulted in page faults(which require disk access), and 4 of the accesses resulted in TLB misses?
+[Hint: Don't forget to take into account the time it takes to access the page table.(2 accesses)]
+<br />
+<b>Question 9 - </b>While accounting for 2 memory access times for a tlb miss ,1  memory access for a tlb hit, and 2 memory accesses and a disk access for a page fault, what would be the generalized formula for the average time taken per memory access with only taking these constraints into effect?
+<br />
+<h3>Implementation</h3>
+Obviously, computing EMAT by hand every time you run the simulator is quite
+tedious.  Since it is generally better to make the computer do these kinds of
+computations for us, this step of the project asks you to fix the function
+<code>compute_emat</code> found in <code>emat.c</code>. This function takes no
+parameters, but it has access to the global statistics maintained by in
+statistics.h, specifically:
+<ul class="ul1">
+  <li><b>count_pagefaults</b> - The number of page faults that occurred.</li>
+  <li><b>count_tlbhits</b> - The number of TLB hits that occurred.</li>
+  <li><b>count_writes</b> - The number of stores/writes that occurred.</li>
+  <li><b>count_reads</b> - The number of loads/reads that occurred.</li>
+</ul>
+Obviously, computing EMAT every time you run the simulator is quite tedious.
+Since it is generally better to make the computer do these kinds of computations
+for us, this step of the project asks you to fix the function compute_emat found
+in <code>emat.c</code>. This function takes no parameters, but it has access to the global
+statistics maintained by in compute_emat still works correctly.
+<br /><br />
+Your computation should use the constant values <code>DISK_ACCESS_TIME</code>
+and <code>MEMORY_ACCESS_TIME</code> which are defined in <code>emat.c</code>.
+For the purposes of this function, treat a TLB hit as taking no time when
+looking up the VPN in the page table.
+<br /><br />
+<h2>Step 4 - Handling Page Faults [20 pts total]</h2>
+What happens when the CPU encounters an invalid address in the page table? When 
+this occurs, the OS should allocate a physical frame for the requested page, by 
+either locating a free frame, or evicting a physical frame that is already in
+use. After this occurs, the OS should update the page table to reflect the new
+mapping, and then continue with the memory access.
+<br /><br />
+What exactly can cause this? Well, when a program is initially started, none of 
+the virtual addresses are valid. When a given address is first used, the OS will
+allocate a physical frame to store the information. If this keeps occurring, the
+OS might be trying to allocate a new physical frame, when there is no memory
+remaining. In this situation, the page fault handler will have to evict a
+physical frame. When it does this, it moves the information stored there to the
+hard disk, and then uses the recently cleared frame.
+<br />
+<h3>Conceptual Questions</h3>
+<b>Question 10 - </b>If a page fault occurs, and there is an invalid frame in th
+e physical memory, should you choose to evict a frame? When would this occur?
+<br />
+<b>Question 11 - </b>What is thrashing? How would a virtual memory system try to
+ eliminate it?
+<br />
+<h3>Implementation</h3>
+Look in the file <code>page-fault.c</code>, and you will find a partially
+implemented page fault handler. Follow the comments detailed in the source file.
+<br /><br />
+While working on this, keep in mind that each process has a page table.
+<code>current_pagetable</code> refers to the pagetable of the currently running
+process (which is the one that needs a new page). The page table of the process
+that owns the victim page can be found in the victim process control block
+<code>victim_pcb</code>
+<br /><br />
+
+<h2>Step 5 - Improving Page Replacement [20 pts total]</h2>
+Up to this point we haven't really worried about what happens when we have to
+make more pages than we have room to store in physical memory. In reality, the
+virtual memory system uses the hard drive to make it seem like there is
+considerably more memory than there really is. While it is really slow to use
+the hard drive in this manner, if page replacement is performed in an
+intelligent manner it is much better than just stopping the user's program.
+<br /><br />
+Right now, the virtual memory system you have built uses a random page
+replacement algorithm that we provided for you. As was discussed above, an
+intelligent system would be much better than this. After asking some questions
+about page replacement, we will ask you to implement one of the algorithms we
+have discussed in class, and observe the impact that this can have upon EMAT.
+<br /><br />
+The optimal page replacement alogrithm would be to look into the future. Of all 
+the physical frames, we should pick the one that is first used the longest time 
+from now. We know that we will not have to evict a page again until that page is
+accessed. Unfortunately, this algorithm requires me to be able to look into the
+future, which isn't something that a modern computer is capable of doing.
+Instead, we take advantage of temporal locality to justify the claim that if a
+page was used recently, it is likely to be used again in the very near future.
+While not optimal, the clock-sweep algorithm is a very reasonable algorithm,
+because it is easy to implement and has relatively decent results in practical
+use. For this project, you will be implementing the clock-sweep algorithm.
+<br /><br />
+The basic idea of clock-sweep is that you mark each page when it is used. When
+you need to evict a page, you iterate (sweep) through memory examining each
+frame's marked bit. If the page is marked, you unmark the bit. When you
+encounter a page that isn't marked, that is the page you will evict. If you
+reach the end of memory the search wraps around (this means that if all pages
+are marked, we will unmark all the pages and then choose the page we started
+with for eviction). Normally, clock-sweep remembers the page it left off on,
+so that the next time it executes it continues on from there. For this
+assignment you will <i>not</i> have to do that. If you do chose to do this,
+however, you will earn brownie points.
+<br /><br />
+In Linux, the clock-sweep algorithm is sometimes also referred to as the second 
+chance algorithm because it gives each page that has been marked as recently use
+d a second chance at not-being evicted.
+<br />
+
+<h3>Conceptual Questions</h3>
+Answer the following questions about page replacement, given the following page 
+table. Assume that any entry not listed is <b>VALID</b> and <b>USED</b>.
+<br /><br />
+
+<table cellspacing="0" cellpadding="0">
+  <tr><th colspan=5> Page Table</th></tr>
+  <tr>
+    <th>VPN</th>
+    <th>PFN</th>
+    <th>valid</th>
+    <th>dirty</th>
+    <th>used</th>
+  </tr>
+  <tr>
+    <td> 0xDE </td>
+    <td> 0xBE </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0xF0 </td>
+    <td> 0xD0 </td>
+    <td> YES </td>
+    <td> YES </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0xBE </td>
+    <td> 0x42 </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+  <tr>
+    <td> 0xBC </td>
+    <td> 0x43 </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+  <tr>
+    <td> 0x42 </td>
+    <td> 0xAB </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0x21 </td>
+    <td> 0x23 </td>
+    <td> NO </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+  <tr>
+    <td> ...  </td>
+    <td> ---- </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> YES </td>
+  </tr>
+</table>
+<br />
+
+<b>Question 12 - </b>What is the first page that should be used when we need to 
+allocate a new page?
+<br />
+<b>Question 13 - </b>Assuming that we are now using the page we selected in ques
+tion 12 and no pages have been marked as used since then, what is the next page 
+we will select?
+<br />
+<b>Question 14 - </b>Again, assuming that we are using the pages selected in que
+stions 12 and 13 and no pages have been marked as used since then, which page is
+ selected?
+<br /><br />
+
+<h3>Implementation</h3>
+Now that you understand how page replacement is supposed to work, open up 
+<code>page-replacement.c</code> and change the replacement algorithm to be more
+intelligent.  You should do two things. If there is an invalid page, simply use
+that one. If there are no invalid pages, perform a clock-sweep algorithm to
+decide which page you should evict.
+<br /><br />
+
+<h2>Step 6 - Adding a TLB [20 pts total]</h2>
+Accessing memory is slow. Virtual memory doesn't really help this, because page 
+tables mean that we will have to access memory twice -- once to translate the
+virtual address to the physical address, and again to actually access the
+correct location. As useful as virtual memory is, if it caused every memory
+access to take twice as long (or longer, if the hard drive came into play), it
+would be an unacceptable cost for smaller programs that didn't need virtual
+memory. Luckily, there are ways of reducing the performance hit.
+<br /><br />
+We obviously can't eliminate the actual memory access, but we can attack the
+page table lookup by adding a small piece of hardware that keeps a small buffer
+of past translations. If we can locate the virtual address in this buffer, we
+can bypass the page table lookup. This buffer is called the Translation
+Lookaside Buffer (TLB) because it provides an alternative means of performing
+the lookup for translation.
+<br />
+
+<h3>Conceptual Questions</h3>
+The structure of the TLB is remarkably similar to the page table. The biggest
+difference is the fact that in the page table, the VPN serves as an index into
+an array, but it is simply another entry in the TLB. This is because the TLB is
+relatively small, and can't store every single entry. Use the TLB provided below
+to answer the questions. The TLB is only capable of holding four entries. Assume
+that any entry not explicitly present in the page table is <b>INVALID</b>.
+
+<br /><br />
+<table cellspacing="0" cellpadding="0">
+  <tr><th colspan=5> TLB </th></tr>
+  <tr>
+    <th>VPN</th>
+    <th>PFN</th>
+    <th>valid</th>
+    <th>dirty</th>
+    <th>used</th>
+  </tr>
+  <tr>
+    <td> 0xDE </td>
+    <td> 0xBE </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0xF0 </td>
+    <td> 0xD0 </td>
+    <td> YES </td>
+    <td> YES </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0x42 </td>
+    <td> 0xAB </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> YES </td>
+  </tr>
+  <tr>
+    <td> 0x21 </td>
+    <td> 0x23 </td>
+    <td> YES </td>
+    <td> NO </td>
+    <td> NO </td>
+  </tr>
+</table>
+<br />
+<b>Question 15 - </b>What address does the virtual address 0xDEAD translate to? 
+Is this translation found in the TLB or the page table?
+<br />
+<b>Question 16 - </b>What address does the virtual address 0xBE21 translate to? 
+Is this translation found in the TLB or the page table?
+<br />
+<b>Question 17 - </b>When we lookup the address 0xBC87, we miss the TLB. This
+requires us to evict a an entry form the TLB. Which entry would we pick to
+evict, assuming we use a standard clock-sweep algorithm?
+<br />
+<h3>Implementation</h3>
+Open up the file <code>tlb-lookup.c</code> and follow the comments describing
+what needs to be fixed. You may want to note that you have access to the TLB
+entries via <code>tlb</code> , which is an array of type <code>tlbe_t</code>
+that contains <code>tlb_size</code> entries. Also keep in mind that since there
+is <b>no relationship</b> between the index in the TLB and the content stored
+there, you will have to check <b>every valid entry</b> in the TLB before
+deciding that you were unable to find an entry. The structure of each entry is
+shown below:
+<pre>
+typedef struct {
+  vpn_t vpn;     /* Virtual page number */
+  pfn_t pfn;     /* Physical frame number */
+  uint8_t valid; /* Valid 'bit' */
+  uint8_t dirty; /* Dirty 'bit' */
+  uint8_t used;  /* Used (aka recently accessed) 'bit' */
+} tlbe_t;
+</pre>
+<br />
+<h2>Submission</h2>
+When you are done with the project simply run <code>make</code> with the target
+<code>submit</code> in the root directory of your project to produce a file
+named <i>p3-submit.tar.gz</i> that contains everything you need to submit for
+this assignment. Obviously, you will need to actually submit this file on
+T-Square.
+<br /><br />
+<h2>Appendix A - The Simulator</h2>
+This section is intended to serve as a reference to the simulator code, if you a
+re interested in how the simulator works, or need to figure out how to do someth
+ing.
+<h2>Simulator Files</h2>
+Simulator files are located in the directory <i>simulator-src</i>. You shouldn't
+have to modify any of these. If you feel a need to look at any of the simulator
+code, you should only need to look at the header files in there. To help you
+understand how the simulator is organized, the following list explains what each
+file in simulator-src does. For simplicity, we only list the filename, and not
+the extension, as the header file serves the same purpose as the source file.
+<ul>
+  <li><b>global - </b>Provide a definition of 3 globally accessible values,
+    specifically page_size, mem_size and tlb_size</li>
+  <li><b>memory - </b>Provide a simulator for the physical memory of the
+  computer.</li>
+  <li><b>pagetable - </b>Provide an implementation of page tables. Of special
+  interest to you should be the functions <code>pagetable_lookup</code>, which
+  you have to write, and get_free_frame which will help you with the
+  implementation of your page fault handler. The structure <code>pte_t</code>
+  represents a single page table entry. If you need to get the page table of the
+  currently executing process, the variable <code>current_pagetable</code> points
+  to the appropriate array.</li>
+  <li><b>process - </b>Provide an implementation of process control blocks, and 
+  various methods for manipulating processes. You probably shouldn't be
+  concerned with anything besides the process control block.</li>
+  <li><b>sim.c - </b>This includes the main function for the simulator, and 
+  primarily serves as an entry point to the rest of the code.</li>
+  <li><b>statistics - </b>This file is used for the gathering and display of
+  statistics.</li>
+  <li><b>swapfile - </b>Provide a simulator for the disk, that allows us to move
+   pages to the disk, and load pages from the disk.</li>
+  <li><b>tlb - </b>Provide the representation of the TLB.</li>
+  <li><b> types.h - </b>Provide some typedefs that allow us to refer to more
+  descriptive types, such as <code>vpn_t</code> instead of <code>int</code>.
+  </li>
+  <li><b>useful.h - </b>Provide Some useful macros.</li>
+</ul>
+
+<h2> End of Assignment</h2>
+
+</body>
+</html>
+
