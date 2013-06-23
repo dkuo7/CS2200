@@ -1,0 +1,12 @@
+Step 1
+
+Q1 - 8 bits offset
+Q2 - 8 bits VPN
+Q3 - 0xBE - VPN
+Q4 - 0xEF - offset
+
+Step 2
+
+Q5 - 0xDEAD -> 0xBEAD
+Q6 - 0xF00D -> 0xD00D
+Q7 - Not valid because valid bit not set
