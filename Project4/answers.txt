@@ -10,3 +10,19 @@ Step 2
 Q5 - 0xDEAD -> 0xBEAD
 Q6 - 0xF00D -> 0xD00D
 Q7 - Not valid because valid bit not set
+
+Step 3
+
+Q8 - 10 * 100ns + 6 * 100ns + 2 * 10ms = 20.0016 ms
+Q9 - (tlb_hits * mem_access_time + 2 * tlb_misses * mem_access_time + 2 * page_faults * mem_access_time + page_faults * disk_access_time) / num_mem_access
+
+Step 4
+
+Q10 - No, you should only choose to evict a frame whenever there are no free frames in physical memory. 
+Q11 - Thrashing is when a process spends more time paging than actually computing. Thrashing is controlled by observing memory usage by the processes and decreasing the degree of multiprogramming if there is too much pressure on the memory.  
+
+C, F, E, B, D
+A, G
+    
+
+ 

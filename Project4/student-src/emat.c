@@ -21,6 +21,12 @@ double compute_emat() {
 
    /* long int total_accesses = count_writes + count_reads; */
    /* long int tlb_misses     = total_accesses - count_tlbhits; */
+   
+   long int total_accesses = count_writes + count_reads;
+   long int tbl_misses = total_accesses - count_tlbhits;
 
-   return 0;
+   long int total_time = total_accesses * MEMORY_ACCESS_TIME + tlb_misses * MEMORY_ACCESS_TIME + count_pagefaults * DISK_ACCESS_TIME;
+   double emat = total time / (total_accesses * 1.0);
+
+   return emat;
 }
