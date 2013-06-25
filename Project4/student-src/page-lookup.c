@@ -16,12 +16,13 @@ pfn_t pagetable_lookup(vpn_t vpn, int write) {
    * Perform the lookup using the current_pagetable.
    */
    pfn_t pfn;
-   pte_t page = current_pagetable[vpn];
+   pte_t page;
+   page = current_pagetable[vpn];
    if(!page.valid) {
    	count_pagefaults++;
    	pfn = pagefault_handler(vpn, write);
    }
-
+   else {
    	pfn = page.pfn;
    }
    return pfn;

@@ -9,8 +9,8 @@ STUDENT   = student-src
 SIMULATOR = simulator-src
 
 CC      = gcc
-OPTIONS = -O2 -I$(STUDENT) -I$(SIMULATOR) # Production options
-#OPTIONS = -O0 -g -I$(STUDENT) -I$(SIMULATOR) # Debugging Options
+#OPTIONS = -O2 -I$(STUDENT) -I$(SIMULATOR) # Production options
+OPTIONS = -O0 -g -I$(STUDENT) -I$(SIMULATOR) # Debugging Options
 CFLAGS  = $(OPTIONS) -Wall -ansi -pedantic -pipe -Werror
 SUBMIT  = $(STUDENT) $(SIMULATOR) Makefile references
 

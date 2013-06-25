@@ -5,6 +5,7 @@
 #include "process.h"
 #include "global.h"
 #include "swapfile.h"
+#include "tlb.h"
 
 /*******************************************************************************
  * Page fault handler. When the CPU encounters an invalid address mapping in a
@@ -18,9 +19,12 @@
  * @return The physical frame the OS has mapped to the virtual page.
  */
 pfn_t pagefault_handler(vpn_t request_vpn, int write) {
+
   pfn_t victim_pfn;
   vpn_t victim_vpn;
   pcb_t *victim_pcb;
+  pte_t *victim_pagetable;
+  pte_t *request_pageentry;
 
   /* Sanity Check */
   assert(current_pagetable != NULL);
@@ -32,6 +36,8 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write) {
   /* Use the reverse lookup table to find the victim. */
   victim_vpn = rlt[victim_pfn].vpn;
   victim_pcb = rlt[victim_pfn].pcb;
+  
+
 
   /* 
    * FIX ME : Problem 4
@@ -41,6 +47,19 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write) {
    * 2) Invalidate the page's entry in the victim's page table.
    * 3) Clear the victim page's TLB entry (hint: tlb_clearone()).
    */
+	
+	
+   if(victim_pcb != NULL) {
+	   victim_pagetable = victim_pcb->pagetable;
+	   if(victim_pagetable[victim_vpn].valid) {
+	   	if(victim_pagetable[victim_vpn].dirty) {
+	   		page_to_disk(victim_pfn,victim_vpn,victim_pcb->pid);
+	   	}
+	  	victim_pcb->pagetable[victim_vpn].valid = 0;
+	   	tlb_clearone(victim_vpn);
+   	   }
+   }
+
 
   printf("PAGE FAULT (VPN %u), evicting (PFN %u VPN %u)\n", request_vpn,
       victim_pfn, victim_vpn);
@@ -48,9 +67,20 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write) {
   /* Update the reverse lookup table so that 
      it knows about the requesting process  */
   /* FIX ME */
+  
+  rlt[victim_pfn].vpn = request_vpn;
+  rlt[victim_pfn].pcb = current;
+  
 
   /* Update the requesting process' page table */
   /* FIX ME */
+  
+  request_pageentry = current_pagetable + request_vpn;
+  
+  request_pageentry->pfn = victim_pfn;
+  request_pageentry->valid = 1;
+  request_pageentry->dirty = 0;
+  request_pageentry->used = 1;
 
   /*
    * Retreive the page from disk. Note that is really a lie: we save pages in
