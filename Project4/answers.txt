@@ -23,6 +23,11 @@ Q11 - Thrashing is when a process spends more time paging than actually computin
 
 C, F, E, B, D
 A, G
-    
+
+Step 5
+
+Q12 - 0x42 will be used because it is the first page that has not been used
+Q13 - 0xBE because it's used bit was cleared in the last question
+Q14 - 0xBE because it is the first page that has not been used
 
  

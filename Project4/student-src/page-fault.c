@@ -55,7 +55,7 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write) {
 	   	if(victim_pagetable[victim_vpn].dirty) {
 	   		page_to_disk(victim_pfn,victim_vpn,victim_pcb->pid);
 	   	}
-	  	victim_pcb->pagetable[victim_vpn].valid = 0;
+	  	victim_pagetable[victim_vpn].valid = 0;
 	   	tlb_clearone(victim_vpn);
    	   }
    }
@@ -79,7 +79,12 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write) {
   
   request_pageentry->pfn = victim_pfn;
   request_pageentry->valid = 1;
-  request_pageentry->dirty = 0;
+  if(write) {
+  	request_pageentry->dirty = 1;
+  }
+  else {
+  	request_pageentry->dirty = 0;
+  }
   request_pageentry->used = 1;
 
   /*
