@@ -23,6 +23,6 @@
  * @param addr The virtual address.
  * @return     The offset into a page for the given virtual address.
  */
-#define VADDR_OFFSET(addr) (page_size % addr)
+#define VADDR_OFFSET(addr) (addr == 0 ? addr :addr % page_size)
 
 #endif/*_STUDENT_PAGE_SPLITTING_H_*/
