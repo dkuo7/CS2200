@@ -79,13 +79,6 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write) {
   
   request_pageentry->pfn = victim_pfn;
   request_pageentry->valid = 1;
-  if(write) {
-  	request_pageentry->dirty = 1;
-  }
-  else {
-  	request_pageentry->dirty = 0;
-  }
-  request_pageentry->used = 1;
 
   /*
    * Retreive the page from disk. Note that is really a lie: we save pages in

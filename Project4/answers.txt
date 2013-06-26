@@ -30,4 +30,10 @@ Q12 - 0x42 will be used because it is the first page that has not been used
 Q13 - 0xBE because it's used bit was cleared in the last question
 Q14 - 0xBE because it is the first page that has not been used
 
+Step 6
+
+Q15 - 0xDEAD translate to 0xBEAD, it is found in the TLB
+Q16 - We don't know because it is found in the page table
+Q17 - We would evict entry 4 because it is the first that is not used
+
  

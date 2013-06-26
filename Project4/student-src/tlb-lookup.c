@@ -15,23 +15,63 @@
  */
 pfn_t tlb_lookup(vpn_t vpn, int write) {
    pfn_t pfn;
+   int i;
+   tlbe_t *tlbe = NULL;
 
    /* 
     * FIX ME : Step 6
     */
-
+   for(i = 0; i < tlb_size; i++) {
+       if(tlb[i].valid && tlb[i].vpn == vpn) {
+           count_tlbhits++;
+           tlbe = tlb + i;
+       }
+   }
    /* 
     * Search the TLB for the given VPN. Make sure to increment count_tlbhits if
     * it was a hit!
     */
+   
     
    /* If it does not exist (it was not a hit), call the page table reader */
-   pfn = pagetable_lookup(vpn, write);
+   if(tlbe==NULL) {
+       pfn = pagetable_lookup(vpn, write);
+   }
+   else {
+       pfn = tlbe->pfn;
+   }
 
    /* 
     * Replace an entry in the TLB if we missed. Pick invalid entries first,
     * then do a clock-sweep to find a victim.
     */
+   if(tlbe==NULL) {
+        for(i = 0; i < tlb_size; i++) {
+            if(!tlb[i].valid) {
+                tlbe = tlb + i;
+                tlbe->vpn = vpn;
+                tlbe->pfn = pfn;
+            }
+        } 
+   }
+   
+   if(tlbe==NULL) {
+       for(i = 0; i < tlb_size; i++) {
+           if(!tlb[i].used) {
+               tlbe = tlb + i;
+               tlbe->vpn = vpn;
+               tlbe->pfn = pfn;
+               break;
+           }
+           tlb[i].used = 0;
+       }
+   }
+   
+   if(tlbe==NULL) {
+       tlbe = tlb + 0;
+       tlbe->vpn = vpn;
+       tlbe->pfn = pfn;
+   }
 
    /*
     * Perform TLB house keeping. This means marking the found TLB entry as
@@ -42,6 +82,12 @@ pfn_t tlb_lookup(vpn_t vpn, int write) {
     * have to wait for it to finish (there wouldn't be much point to a TLB if
     * we didn't!).
     */
+   if(write) {
+       tlbe->dirty = 1;
+       current_pagetable[vpn].dirty = 1;
+   }
+   tlbe->used = 1;
+   current_pagetable[vpn].used = 1;
 
    return pfn;
 }

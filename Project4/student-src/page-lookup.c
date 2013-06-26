@@ -25,9 +25,5 @@ pfn_t pagetable_lookup(vpn_t vpn, int write) {
    else {
    	pfn = page->pfn;
    }
-	page->used = 1;
-	if(write) {
-		page->dirty = 1;
-	}
    return pfn;
 }
