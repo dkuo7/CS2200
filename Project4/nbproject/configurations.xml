@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="89">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="Project4">
+      <df name="simulator-src">
+        <in>global.c</in>
+        <in>global.h</in>
+        <in>memory.c</in>
+        <in>memory.h</in>
+        <in>pagetable.c</in>
+        <in>pagetable.h</in>
+        <in>process.c</in>
+        <in>process.h</in>
+        <in>sim.c</in>
+        <in>statistics.c</in>
+        <in>statistics.h</in>
+        <in>swapfile.c</in>
+        <in>swapfile.h</in>
+        <in>tlb.c</in>
+        <in>tlb.h</in>
+        <in>types.h</in>
+        <in>useful.h</in>
+      </df>
+      <df name="student-src">
+        <in>emat.c</in>
+        <in>page-fault.c</in>
+        <in>page-lookup.c</in>
+        <in>page-replacement.c</in>
+        <in>page-splitting.h</in>
+        <in>tlb-lookup.c</in>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath>vm-sim</executablePath>
+          <cTool>
+            <incDir>
+              <pElem>student-src</pElem>
+              <pElem>simulator-src</pElem>
+              <pElem>.</pElem>
+            </incDir>
+          </cTool>
+        </makeTool>
+      </makefileType>
+      <item path="simulator-src/global.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/global.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/memory.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/memory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/pagetable.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/pagetable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/process.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/process.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/sim.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/statistics.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/statistics.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/swapfile.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/swapfile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/tlb.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="simulator-src/tlb.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="simulator-src/useful.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="student-src/emat.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="student-src/page-fault.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="student-src/page-lookup.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="student-src/page-replacement.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="student-src/page-splitting.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="student-src/tlb-lookup.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
