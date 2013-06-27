@@ -4,6 +4,7 @@
 #include "pagetable.h"
 #include "global.h" /* for tlb_size */
 #include "statistics.h"
+#include "useful.h"
 
 /*******************************************************************************
  * Looks up an address in the TLB. If no entry is found, attempts to access the
@@ -51,6 +52,8 @@ pfn_t tlb_lookup(vpn_t vpn, int write) {
                 tlbe = tlb + i;
                 tlbe->vpn = vpn;
                 tlbe->pfn = pfn;
+                tlbe->valid = 1;
+                break;
             }
         } 
    }
@@ -61,6 +64,7 @@ pfn_t tlb_lookup(vpn_t vpn, int write) {
                tlbe = tlb + i;
                tlbe->vpn = vpn;
                tlbe->pfn = pfn;
+               tlbe->valid = 1;
                break;
            }
            tlb[i].used = 0;
@@ -71,6 +75,7 @@ pfn_t tlb_lookup(vpn_t vpn, int write) {
        tlbe = tlb + 0;
        tlbe->vpn = vpn;
        tlbe->pfn = pfn;
+       tlbe->valid = 1;
    }
 
    /*
