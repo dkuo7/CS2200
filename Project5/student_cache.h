@@ -4,14 +4,36 @@
 #define WBWA 0
 #define WTWNA 1
 
+/*
+    Defines a block in a cache
+*/
+typedef struct {
+	unsigned char valid;
+	unsigned char dirty;
+	unsigned int tag;
+} cache_block;
+
+/*
+    Defines a way that holds blocks and
+    the size is the number of cache lines
+*/
+typedef struct {
+	cache_block* blocks; /* size = 2^(C - B - S) */
+    int blocks_size;
+} cache_way;
 
 /*
 	Create your datastructure here
 	DO NOT CHANGE THE NAME
 */
 typedef struct {
-	//change this
+	cache_way* ways; /* size = 2^S */
+    int ways_size;
 } student_cache_t;
+
+
+
+
 /*
 	you may change the name here if you want an alias for it
 	typedef student_cache_t also_student_cache_t;
