@@ -1,0 +1,31 @@
+1. determine definitions of everything
+
+2^C bytes of total data storage
+2^B-byte blocks, 
+2^S blocks per set
+
+2^C = cache size
+2^B = block size
+2^S = blocks per set
+
+# of offset bits = B
+# of index bits = C - B - S
+# of tag bits = 32 - index_bits - offset_bits
+
+valid array (1 bit):
+	-size = 2^(C-B)
+	
+tag array (tag bits):
+	-size = 2^(C-B)
+	
+dirty array (1 bit if WB):
+	-size = 2^(C-B)
+
+
+
+how many data blocks?
+
+
+2. create data structures
+
+
