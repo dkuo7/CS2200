@@ -29,6 +29,10 @@ typedef struct {
 typedef struct {
 	cache_way* ways; /* size = 2^S */
     int ways_size;
+    unsigned char WP;
+    unsigned char C;
+    unsigned char B;
+    unsigned char S;
 } student_cache_t;
 
 
