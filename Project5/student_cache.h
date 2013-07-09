@@ -22,13 +22,21 @@ typedef struct {
     int blocks_size;
 } cache_way;
 
+typedef struct cache_LRU cache_LRU;
+struct cache_LRU {
+    int way_index;
+    cache_LRU* next;
+};
+
 /*
 	Create your datastructure here
 	DO NOT CHANGE THE NAME
 */
 typedef struct {
 	cache_way* ways; /* size = 2^S */
+    cache_LRU* LRUs;
     int ways_size;
+    int LRUs_size;
     unsigned char WP;
     unsigned char C;
     unsigned char B;

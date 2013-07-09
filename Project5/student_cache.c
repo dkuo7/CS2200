@@ -73,10 +73,12 @@ int calc_ibits(student_cache_t *cache) {
 int calc_tbits(student_cache_t *cache) {
     return 32 - calc_obits(cache) - calc_ibits(cache);
 }
+
 student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics){
     int i,j;
     cache_way *way;
     cache_block *block;
+    cache_LRU *lru;
 
     student_cache_t *cache = malloc(sizeof(student_cache_t));    
 
@@ -86,6 +88,17 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
     cache->S = S;
     cache->ways_size = 2^S;
     cache->ways = calloc(cache->ways_size, sizeof(cache_way));
+    cache->LRUs_size = 2^(C-B-S);
+    cache->LRUs = calloc(cache->LRUs_size, sizeof(cache_LRU));
+
+    for(i=0; i<cache->LRUs_size; i++) {
+        lru = cache->LRUs + i;
+        for(j=0; j<cache->ways_size; j++) {
+           lru->way_index = j;
+           lru->next = malloc(sizeof(cache_LRU));
+           lru = lru->next;
+        }
+    }
 
     for(i=0; i<cache->ways_size; i++) {
         way = cache->ways + i;
