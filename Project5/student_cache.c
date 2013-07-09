@@ -9,30 +9,79 @@ int calc_ibits(student_cache_t *cache);
 int calc_tbits(student_cache_t *cache);
 
 cache_block* find_block(address_t addr, student_cache_t *cache);
+cache_block* find_invalid(address_t addr, student_cache_t *cache);
+cache_block* find_LRU(address_t addr, student_cache_t *cache);
+cache_block* get_block_from_way(int index, cache_way *way); 
+
+void set_used(student_cache_t *cache, int block_index, int way_index);
 
 int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
     cache_block *block;
-
+    
+    /* Check if in cache */
     block = find_block(addr,cache);
-    if(block != NULL) {
-        return 1;
+    
+    if(block == NULL) {
+        /* It's a miss so look for an invalid spot */
+        block = find_invalid(addr,cache);
+        if(block == NULL) {
+            /* No invalids so evict the LRU */
+            block = find_LRU(addr,cache);
+        }
+        block->valid = 1;
+        block->tag = decode_tag(addr,cache);
     }
-    return 0;
+    printf("Way Index:%d\n",cache->LRUs[decode_index(addr,cache)].way_index);
+    return 1;
+}
+
+void set_used(student_cache_t *cache, int block_index, int way_index) {
+    
+}
+
+cache_block* find_invalid(address_t addr, student_cache_t *cache) {
+    int i;
+    int index = decode_index(addr,cache);
+    cache_block *block;
+    for(i=0; i<cache->ways_size; i++) {
+        block = get_block_from_way(index,cache->ways+i);
+        if(!block->valid) {
+            set_used(cache,index,i); 
+            return block;
+        } 
+    }
+    return NULL;
 }
 
 cache_block* find_block(address_t addr, student_cache_t *cache) {
     int i;
+    int index = decode_index(addr,cache);
     int tag = decode_tag(addr,cache);
     cache_block *block;
-    cache_way *way;
     for(i=0; i<cache->ways_size; i++) {
-       way = cache->ways + i;
-       block = way->blocks + decode_index(addr,cache);
+       block = get_block_from_way(index,cache->ways+i);
        if(block->valid && block->tag == tag) {
+           set_used(cache,index,i); 
            return block;
        }
     }
     return NULL;
+}
+
+cache_block* find_LRU(address_t addr, student_cache_t *cache) {
+    int index = decode_index(addr,cache);
+    cache_LRU *lru;
+    cache_block *block;
+    lru = cache->LRUs + index; 
+    block = get_block_from_way(index,cache->ways + lru->way_index);
+    set_used(cache,index,lru->way_index);
+    return block;
+
+}
+
+
+cache_block* get_block_from_way(int index, cache_way *way) {
+    return way->blocks + index;
 }
 
 int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
