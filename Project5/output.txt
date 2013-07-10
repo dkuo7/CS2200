@@ -99999,17 +99999,17 @@ Read HIT for address 10417c44
 Read MISS for address 10435ffc
 Read MISS for address 10436004
 Read HIT for address 1006cb58
-Total memory/cache accesses: -1217167360
-Total reads: -1217308584
-Total read misses: 134514504
-Total read hits: -1217421312
-Total writes: -1076364771
+Total memory/cache accesses: 76284
+Total reads: 0
+Total read misses: 0
+Total read hits: 0
+Total writes: 0
 Total write misses: 0
-Total write hits: 134516752
-Bytes transferred to memory: 134513609
-Bytes transfered from memory: -1217420316
-Total cache misses: -1219134568
+Total write hits: 0
+Bytes transferred to memory: 0
+Bytes transfered from memory: 0
+Total cache misses: 0
 Read hit rate: 0.00000
 Hit rate: 0.00000
-Total cache size (bits): -1076370876
-AAT: -0.00000
+Total cache size (bits): 0
+AAT: 0.00000

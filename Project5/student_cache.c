@@ -21,8 +21,9 @@ int two_power_of(int power);
 
 int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
     cache_block *block;
+    stats->accesses++;
+    stats->reads++;
     
-    print_LRU(cache,decode_index(addr,cache));
     /* Check if in cache */
     block = find_block(addr,cache);
     if(block == NULL) {
@@ -33,8 +34,10 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
             block = find_LRU(addr,cache);
         }
         /* Set up the block for the new address */
+        block->dirty = 0;
         block->valid = 1;
         block->tag = decode_tag(addr,cache);
+        stats->misses++;
         return 0;
     }
     return 1;
@@ -42,6 +45,8 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
 
 int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
     cache_block *block;
+    stats->accesses++;
+    stats->writes++;
 
     block = find_block(addr,cache);
     if(block == NULL) {
@@ -55,8 +60,10 @@ int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
         block->valid = 1;
         block->dirty = 1;
         block->tag = decode_tag(addr,cache);
+        stats->misses++;
         return 0;
     }
+    block->dirty = 1;
     return 1;
 }
 
@@ -119,6 +126,9 @@ cache_block* find_LRU(address_t addr, student_cache_t *cache) {
     cache_block *block;
     lru = cache->LRUs + index; 
     block = get_block_from_way(index,cache->ways + lru->way_index);
+    if(block->dirty) {
+
+    }
     set_used(cache,index,lru->way_index);
     return block;
 
@@ -200,6 +210,23 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
             block->tag = 0;
         }
     }
+
+    statistics->accesses = 0;
+    statistics->misses = 0;
+    statistics->reads = 0;
+    statistics->writes = 0;
+    statistics->read_hit = 0;
+    statistics->write_hit = 0;
+    statistics->read_miss = 0;
+    statistics->write_miss = 0;
+    statistics->mem_write_bytes = 0;
+    statistics->mem_read_bytes = 0;
+    statistics->read_hit_rate = 0;
+    statistics->hit_rate = 0;
+    statistics->total_bits = 0;
+    statistics->AAT = 0;
+
+
 	return cache;
 }
 
