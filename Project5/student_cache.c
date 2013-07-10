@@ -164,7 +164,12 @@ cache_block* get_block_from_way(int index, cache_way *way) {
 }
 
 void transfer_to_memory(student_cache_t *cache, stat_t* stats) {
-    stats->mem_write_bytes += two_power_of(cache->B); 
+    if(cache->WP==WBWA) {
+        stats->mem_write_bytes += two_power_of(cache->B); 
+    }
+    else {
+        stats->mem_write_bytes += 4;
+    }
 }
 
 void transfer_from_memory(student_cache_t *cache, stat_t* stats) {
