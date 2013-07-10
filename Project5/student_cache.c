@@ -28,15 +28,33 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
             /* No invalids so evict the LRU */
             block = find_LRU(addr,cache);
         }
+        /* Set up the block for the new address */
         block->valid = 1;
         block->tag = decode_tag(addr,cache);
+        return 0;
     }
     printf("Way Index:%d\n",cache->LRUs[decode_index(addr,cache)].way_index);
     return 1;
 }
 
 void set_used(student_cache_t *cache, int block_index, int way_index) {
-    
+    cache_LRU *current = cache->LRUs + block_index;
+    cache_LRU *target = current;
+    if(current->way_index == way_index) {
+        cache->LRUs[block_index] = *(current->next);
+    }
+    while(current->next != NULL) {
+        if(current->next->way_index == way_index) {
+            target = current->next;
+            if(target->next == NULL) {
+                break;
+            }
+            current->next = target->next;
+        }
+        current = current->next;
+    }
+    current->next = target;
+    target->next = NULL;
 }
 
 cache_block* find_invalid(address_t addr, student_cache_t *cache) {
