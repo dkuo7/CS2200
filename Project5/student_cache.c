@@ -1,4 +1,9 @@
 #include "student_cache.h"
+#ifdef DEBUG
+# define DEBUG_PRINT(x) printf x
+#else
+# define DEBUG_PRINT(x) do {} while (0)
+#endif
 
 int decode_offset(address_t address, student_cache_t *cache);
 int decode_index(address_t address, student_cache_t *cache);
@@ -8,7 +13,7 @@ int calc_obits(student_cache_t *cache);
 int calc_ibits(student_cache_t *cache);
 int calc_tbits(student_cache_t *cache);
 
-cache_block* find_block(address_t addr, student_cache_t *cache);
+cache_block* find_block(address_t addr, student_cache_t *cache, int write);
 cache_block* find_invalid(address_t addr, student_cache_t *cache);
 cache_block* find_LRU(address_t addr, student_cache_t *cache);
 cache_block* get_block_from_way(int index, cache_way *way); 
@@ -27,10 +32,9 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
     cache_block *block;
     stats->accesses++;
     stats->reads++;
-    printf("INDEX: %x\n",decode_index(addr,cache));
-    
+    DEBUG_PRINT(("INDEX: %x\n",decode_index(addr,cache)));
     /* Check if in cache */
-    block = find_block(addr,cache);
+    block = find_block(addr,cache,0);
     if(block == NULL) {
         /* It's a miss so look for an invalid spot */
         block = find_invalid(addr,cache);
@@ -61,7 +65,7 @@ int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
         transfer_to_memory(cache,stats);
     }
 
-    block = find_block(addr,cache);
+    block = find_block(addr,cache,1);
     if(block == NULL) {
         if(cache->WP == WTWNA) {
             return 0;
@@ -126,18 +130,17 @@ cache_block* find_invalid(address_t addr, student_cache_t *cache) {
     return NULL;
 }
 
-cache_block* find_block(address_t addr, student_cache_t *cache) {
+cache_block* find_block(address_t addr, student_cache_t *cache, int write) {
     int i;
     int index = decode_index(addr,cache);
     int tag = decode_tag(addr,cache);
-    printf("FINDING BLOCK FOR: %x\n",addr);
-    printf("I: %x TAG: %x\n",index,tag);
     cache_block *block;
     for(i=0; i<cache->ways_size; i++) {
        block = get_block_from_way(index,cache->ways+i);
-       printf("VALID?: %d\n",block->valid);
        if(block->valid && block->tag == tag) {
-           set_used(cache,index,i); 
+           if(!write || cache->WP==WBWA) {
+               set_used(cache,index,i); 
+           }
            return block;
        }
     }
@@ -201,7 +204,7 @@ int calc_tbits(student_cache_t *cache) {
 student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics){
     int i,j;
     cache_way *way;
-    cache_block *block;
+    /*cache_block *block;*/
     cache_LRU *lru;
 
     student_cache_t *cache = malloc(sizeof(student_cache_t));    
@@ -224,6 +227,9 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
                lru->next = malloc(sizeof(cache_LRU));
                lru = lru->next;
            }
+           else {
+               lru->next = NULL;
+           }
         }
     }
 
@@ -231,12 +237,12 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
         way = cache->ways + i;
         way->blocks_size = two_power_of(C-B-S);
         way->blocks = calloc(way->blocks_size , sizeof(cache_block));
-        for(j=0; j<way->blocks_size;j++) {
+        /*for(j=0; j<way->blocks_size;j++) {
             block = way->blocks + j;
             block->valid = 0;
             block->dirty = 0;
             block->tag = 0;
-        }
+        }*/
     }
 
     statistics->accesses = 0;
@@ -253,8 +259,6 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
     statistics->hit_rate = 0;
     statistics->total_bits = 0;
     statistics->AAT = 0;
-
-
 	return cache;
 }
 
