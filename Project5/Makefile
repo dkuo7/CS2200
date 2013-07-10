@@ -1,7 +1,7 @@
 #The compiler
 CC = gcc
 #the flags to be used in compilation
-CFLAGS = -std=c11 -O2 -Wall -Werror
+CFLAGS = -std=c11 -O2 -Wall -Werror -g
 #the flags to be used in linking
 LFLAGS = 
 #the o files, if you add more c files you will need to put the corresponding ofiles here

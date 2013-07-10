@@ -40,36 +40,18 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
     return 1;
 }
 
-int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
-    cache_block *block;
-
-    block = find_block(addr,cache);
-    if(block == NULL) {
-        /* It's a miss so look for an invalid spot */
-        block = find_invalid(addr,cache);
-        if(block == NULL) {
-            /* No invalids so evict the LRU */
-            block = find_LRU(addr,cache);
-        }
-        /* Set up the block for the new address */
-        block->valid = 1;
-        block->dirty = 1;
-        block->tag = decode_tag(addr,cache);
-        return 0;
-    }
-    return 1;
-}
-
-
-
 void print_LRU(student_cache_t *cache, int block_index) {
+    printf("LRU FOR INDEX: %d\n",block_index);
     cache_LRU *current = cache->LRUs + block_index;
     while(current->next != NULL) {
+        printf("WAY: %d -->",current->way_index);
         current = current->next;
     }
+    printf("WAY: %d\n",current->way_index);
 }
 
 void set_used(student_cache_t *cache, int block_index, int way_index) {
+    printf("SETTING USED FOR INDEX: %d AND WAY: %d\n",block_index,way_index);
     int hit = 0;
     cache_LRU *current = cache->LRUs + block_index;
     while(current->next != NULL) {
@@ -127,6 +109,16 @@ cache_block* find_LRU(address_t addr, student_cache_t *cache) {
 
 cache_block* get_block_from_way(int index, cache_way *way) {
     return way->blocks + index;
+}
+
+int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
+/*
+    cache_block *block = find_block(addr,cache);
+    if(block != NULL) {
+        block->dirty = 1;
+        return 1;
+    }*/
+    return 0;
 }
 
 int decode_offset(address_t address, student_cache_t *cache) {
@@ -191,6 +183,7 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
     for(i=0; i<cache->ways_size; i++) {
         way = cache->ways + i;
         way->blocks_size = two_power_of(C-B-S);
+        printf("BLOCKS_SIZE:%d\n",way->blocks_size);
         way->blocks = calloc(way->blocks_size, sizeof(cache_block));
 
         for(j=0; j<way->blocks_size;j++) {
