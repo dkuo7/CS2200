@@ -10,7 +10,7 @@
 typedef struct {
 	unsigned char valid;
 	unsigned char dirty;
-	int tag;
+	unsigned char tag;
 } cache_block;
 
 /*
