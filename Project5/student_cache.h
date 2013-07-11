@@ -22,6 +22,9 @@ typedef struct {
     int blocks_size;
 } cache_way;
 
+/*
+		Defines a LRU marker for a way
+*/
 typedef struct cache_LRU cache_LRU;
 struct cache_LRU {
     int way_index;
@@ -109,5 +112,29 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
 	all of the values ready for printing
 */
 void finalize_stats(student_cache_t *cache, stat_t *statistics);
+
+/* Helper function signatures */
+int decode_offset(address_t address, student_cache_t *cache);
+int decode_index(address_t address, student_cache_t *cache);
+int decode_tag(address_t address, student_cache_t *cache);
+
+int calc_obits(student_cache_t *cache);
+int calc_ibits(student_cache_t *cache);
+int calc_tbits(student_cache_t *cache);
+
+cache_block* find_block(address_t addr, student_cache_t *cache, int write);
+cache_block* find_invalid(address_t addr, student_cache_t *cache);
+cache_block* find_LRU(address_t addr, student_cache_t *cache);
+cache_block* get_block_from_way(int index, cache_way *way); 
+
+void print_LRU(student_cache_t *cache, int block_index);
+
+void set_used(student_cache_t *cache, int block_index, int way_index);
+
+
+void transfer_from_memory(student_cache_t *cache, stat_t *stats);
+void transfer_to_memory(student_cache_t *cache, stat_t *stats);
+
+int two_power_of(int power);
 
 
