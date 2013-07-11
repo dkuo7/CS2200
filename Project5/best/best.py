@@ -1,6 +1,8 @@
 import argparse
 parser = argparse.ArgumentParser(description="Find the best.")
-parser.add_argument("file")
+parser.add_argument("file",help="Trace file")
+parser.add_argument("start_C",type=int)
+parser.add_argument("end_C",type=int)
 """
 parser.add_argument("C",type=int)
 parser.add_argument("B",type=int)
@@ -32,7 +34,7 @@ def make_cmd(C,B,S,WP):
     return cmd
 
 for WP in ["WBWA","WTWNA"]:
-    for C in range(0,10):
+    for C in range(args.start_C,args.end_C + 1):
         for sm in range(0,C+1):
             for B in range(0,sm +1):
                 S = sm - B
