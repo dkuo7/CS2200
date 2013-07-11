@@ -8,7 +8,7 @@
 int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
     cache_block *block;
 
-	 /* Increment stats */
+   /* Increment stats */
     stats->accesses++;
     stats->reads++;
 
@@ -20,7 +20,7 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
         if(block == NULL) {
             /* No invalids so evict the LRU */
             block = find_LRU(addr,cache);
-				/* Save it if's dirty and we're in WB */
+      /* Save it if's dirty and we're in WB */
             if(block->dirty && cache->WP == WBWA) {
                 transfer_to_memory(cache,stats);
             }
@@ -29,8 +29,8 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
         block->dirty = 0;
         block->valid = 1;
         block->tag = decode_tag(addr,cache);
-			
-		  /* Count the miss and transfer block from memory */
+      
+        /* Count the miss and transfer block from memory */
         stats->read_miss++;
         transfer_from_memory(cache,stats);
         return 0;
@@ -43,18 +43,18 @@ int student_read(address_t addr, student_cache_t *cache, stat_t *stats){
 int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
     cache_block *block;
 
-	 /* Increment stats */
+    /* Increment stats */
     stats->accesses++;
     stats->writes++;
 
-	 /* Send to memory if in WTWNA mode */
+    /* Send to memory if in WTWNA mode */
     if(cache->WP == WTWNA) {
         transfer_to_memory(cache,stats);
     }
 
     block = find_block(addr,cache,1);
     if(block == NULL) {
-		  /* It's a miss so quit if in WTWNA */
+        /* It's a miss so quit if in WTWNA */
         if(cache->WP == WTWNA) {
             return 0;
         }
@@ -63,7 +63,7 @@ int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
         if(block == NULL) {
             /* No invalids so evict the LRU */
             block = find_LRU(addr,cache);
-				/* Save it if's dirty */
+            /* Save it if's dirty */
             if(block->dirty) {
                 transfer_to_memory(cache,stats);
             }
@@ -73,7 +73,7 @@ int student_write(address_t addr, student_cache_t *cache, stat_t *stats){
         block->dirty = 1;
         block->tag = decode_tag(addr,cache);
 
-		  /* Count the miss and transfer block from memory */
+        /* Count the miss and transfer block from memory */
         stats->write_miss++;
         transfer_from_memory(cache,stats);
         return 0;
@@ -89,10 +89,10 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
     cache_way *way;
     cache_LRU *lru;
 
-	 /* Make room for the cache */
+    /* Make room for the cache */
     student_cache_t *cache = malloc(sizeof(student_cache_t));    
 
-	 /* Initialize cache values */
+    /* Initialize cache values */
     cache->WP = WP;
     cache->C = C;
     cache->B = B;
@@ -113,7 +113,7 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
                lru = lru->next;
            }
            else {
-					/* At end of linked list */
+               /* At end of linked list */
                lru->next = NULL;
            }
         }
@@ -126,7 +126,7 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
         way->blocks = calloc(way->blocks_size , sizeof(cache_block));
     }
 
-	 /* Initialize stats */
+   /* Initialize stats */
     statistics->accesses = 0;
     statistics->misses = 0;
     statistics->reads = 0;
@@ -141,7 +141,7 @@ student_cache_t *allocate_cache(int C, int B, int S, int WP, stat_t* statistics)
     statistics->hit_rate = 0;
     statistics->total_bits = 0;
     statistics->AAT = 0;
-	 return cache;
+   return cache;
 }
 
 /* Look for a matching tag in the cache */
@@ -150,19 +150,19 @@ cache_block* find_block(address_t addr, student_cache_t *cache, int write) {
     int index = decode_index(addr,cache);
     int tag = decode_tag(addr,cache);
     cache_block *block;
-	 /* Loop through the cache line */
+    /* Loop through the cache line */
     for(i=0; i<cache->ways_size; i++) {
        block = get_block_from_way(index,cache->ways+i);
        if(block->valid && block->tag == tag) {
-		     /* Found a valid match */
+           /* Found a valid match */
            if(!write || cache->WP==WBWA) {
-					/* Only set used if a read or a WBWA write */
+           /* Only set used if a read or a WBWA write */
                set_used(cache,index,i); 
            }
            return block;
        }
     }
-	 /* No match so return NULL */
+    /* No match so return NULL */
     return NULL;
 }
 
@@ -171,7 +171,7 @@ cache_block* find_invalid(address_t addr, student_cache_t *cache) {
     int i;
     int index = decode_index(addr,cache);
     cache_block *block;
-	 /* Loop through the cache line and return a block if it's invalid */
+    /* Loop through the cache line and return a block if it's invalid */
     for(i=0; i<cache->ways_size; i++) {
         block = get_block_from_way(index,cache->ways+i);
         if(!block->valid) {
@@ -179,7 +179,7 @@ cache_block* find_invalid(address_t addr, student_cache_t *cache) {
             return block;
         } 
     }
-	 /* Nothing found so return NULL */
+    /* Nothing found so return NULL */
     return NULL;
 }
 
@@ -191,7 +191,7 @@ cache_block* find_LRU(address_t addr, student_cache_t *cache) {
     /* Find the LRU block from the LRUs array */
     lru = cache->LRUs + index; 
     block = get_block_from_way(index,cache->ways + lru->way_index);
-	 /* Set as used */
+    /* Set as used */
     set_used(cache,index,lru->way_index);
     return block;
 
@@ -201,19 +201,19 @@ cache_block* find_LRU(address_t addr, student_cache_t *cache) {
 void set_used(student_cache_t *cache, int block_index, int way_index) {
     int hit = 0;
     cache_LRU *current = cache->LRUs + block_index;
-	 /* Loop through LRU markers for a cache line */
+    /* Loop through LRU markers for a cache line */
     while(current->next != NULL) {
-		  /* Wait until the target used is found */
+        /* Wait until the target used is found */
         if(current->way_index == way_index) {
             hit = 1;
         }
-		  /* Propagate indexes backward if target was infront */
+        /* Propagate indexes backward if target was infront */
         if(hit) {
             current->way_index = current->next->way_index;
         }
         current = current->next;
     }
-	 /* Add the used index to the back */
+    /* Add the used index to the back */
     current->way_index = way_index;
 }
 
