@@ -191,6 +191,9 @@ int decode_tag(address_t address, student_cache_t *cache) {
     int obits = calc_obits(cache);
     int ibits = calc_ibits(cache);
     int tbits = calc_tbits(cache);
+    if(tbits == 32) {
+        return address;
+    }
     return (address & (((1 << tbits) - 1) << obits << ibits)) >> obits >> ibits; 
 }
 
@@ -199,7 +202,7 @@ int calc_obits(student_cache_t *cache) {
 }
 
 int calc_ibits(student_cache_t *cache) {
-    return cache->C - cache->B - cache-> S;
+    return cache->C - cache->B - cache->S;
 }
 
 int calc_tbits(student_cache_t *cache) {

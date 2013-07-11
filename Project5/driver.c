@@ -48,9 +48,11 @@ int main(int argc, char* argv[]){
 	while(2 == scanf("%c %x\n", &rw, &addr)){
 		switch(rw){
 		case 'r':
+            /*student_read(addr,cache,&stats);*/
 			printf("Read %s for address %08x\n", student_read(addr, cache, &stats)?"HIT":"MISS",addr);
 			break;
 		case 'w':
+            /*student_write(addr,cache,&stats);*/
 			printf("Write %s for address %08x\n", student_write(addr, cache, &stats)?"HIT":"MISS",addr);
 			break;
 		}
