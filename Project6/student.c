@@ -9,9 +9,15 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "os-sim.h"
+#define DEBUG
+#ifdef DEBUG
+# define DEBUG_PRINT(x) printf x
+#else
+# define DEBUG_PRINT(x) do {} while (0)
+#endif
 
+void logp(pcb_t *pcb, char *message);
 
 /*
  * current[] is an array of pointers to the currently running processes.
@@ -24,6 +30,43 @@
  */
 static pcb_t **current;
 static pthread_mutex_t current_mutex;
+
+/* head of ready queue */
+static pcb_t *head;
+static pthread_mutex_t ready_mutex;
+
+/* condition variable for idle function */
+static pthread_cond_t not_idle;
+
+/* add a process block to the ready queue linked list */
+static void add_to_ready(pcb_t *pcb) {
+    pcb_t *curr;
+    pthread_mutex_lock(&ready_mutex);
+    curr = head;
+    if(curr==NULL) {
+        head = pcb;
+    }
+    else {
+        while(curr->next != NULL) {
+           curr = curr->next; 
+        }
+        curr->next = pcb;
+    }
+    pthread_cond_broadcast(&not_idle);
+    pthread_mutex_unlock(&ready_mutex);
+}
+
+/* pop a process from the head of the ready queue */
+static pcb_t* pop_from_ready() {
+    pcb_t *popped;
+    pthread_mutex_lock(&ready_mutex);
+    popped = head;
+    if(popped != NULL) {
+        head = popped->next;
+    }
+    pthread_mutex_lock(&ready_mutex);
+    return popped;
+}
 
 
 /*
@@ -44,7 +87,16 @@ static pthread_mutex_t current_mutex;
  */
 static void schedule(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pcb_t *pcb = pop_from_ready();
+    if(pcb == NULL) {
+        DEBUG_PRINT(("Nothing in ready queue...idling..."));
+        context_switch(cpu_id,NULL,-1);
+    }
+    pcb->state = PROCESS_RUNNING;
+    pthread_mutex_lock(&current_mutex);
+    current[cpu_id] = pcb;
+    pthread_mutex_unlock(&current_mutex); 
+    context_switch(cpu_id,pcb,-1);
 }
 
 
@@ -57,8 +109,12 @@ static void schedule(unsigned int cpu_id)
  */
 extern void idle(unsigned int cpu_id)
 {
-    /* FIX ME */
-    schedule(0);
+    pthread_mutex_lock(&ready_mutex);
+    while(head==NULL) {
+        pthread_cond_wait(&not_idle,&ready_mutex);
+    }
+    pthread_mutex_unlock(&ready_mutex);
+    schedule(cpu_id);
 
     /*
      * REMOVE THE LINE BELOW AFTER IMPLEMENTING IDLE()
@@ -69,7 +125,6 @@ extern void idle(unsigned int cpu_id)
      * you implement a proper idle() function using a condition variable,
      * remove the call to mt_safe_usleep() below.
      */
-    mt_safe_usleep(1000000);
 }
 
 
@@ -95,7 +150,12 @@ extern void preempt(unsigned int cpu_id)
  */
 extern void yield(unsigned int cpu_id)
 {
-    /* FIX ME */
+   pcb_t *pcb;
+   pthread_mutex_lock(&current_mutex); 
+   pcb = current[cpu_id];
+   pcb->state = PROCESS_WAITING;
+   pthread_mutex_unlock(&current_mutex);
+   schedule(cpu_id);
 }
 
 
@@ -106,7 +166,12 @@ extern void yield(unsigned int cpu_id)
  */
 extern void terminate(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pcb_t *pcb;
+    pthread_mutex_lock(&current_mutex); 
+    pcb = current[cpu_id];
+    pcb->state = PROCESS_TERMINATED;
+    pthread_mutex_unlock(&current_mutex);
+    schedule(cpu_id);
 }
 
 
@@ -127,8 +192,16 @@ extern void terminate(unsigned int cpu_id)
  */
 extern void wake_up(pcb_t *process)
 {
+    logp(process,"WAKING UP");
+    process->state = PROCESS_READY;
+    add_to_ready(process);
     /* FIX ME */
 }
+
+void logp(pcb_t *pcb, char *message) {
+    DEBUG_PRINT(("PID: %d NAME: %s\t\t%s\n",pcb->pid,pcb->name,message));
+}
+
 
 
 /*
@@ -157,6 +230,13 @@ int main(int argc, char *argv[])
     current = malloc(sizeof(pcb_t*) * cpu_count);
     assert(current != NULL);
     pthread_mutex_init(&current_mutex, NULL);
+
+    /* Setup up the ready queue */
+    head = NULL;
+    pthread_mutex_init(&ready_mutex, NULL);
+
+    /* Setup the idle variable */
+    pthread_cond_init(&not_idle, NULL);
 
     /* Start the simulator in the library */
     start_simulator(cpu_count);
