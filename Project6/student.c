@@ -9,8 +9,9 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "os-sim.h"
-#define DEBUG
+
 #ifdef DEBUG
 # define DEBUG_PRINT(x) printf x
 #else
@@ -18,6 +19,7 @@
 #endif
 
 void logp(pcb_t *pcb, char *message);
+void print_help();
 
 /*
  * current[] is an array of pointers to the currently running processes.
@@ -38,6 +40,11 @@ static pthread_mutex_t ready_mutex;
 /* condition variable for idle function */
 static pthread_cond_t not_idle;
 
+/* round-robin and static priority info */
+static int is_round_robin;
+static int time_slice;
+static int is_static_prior;
+
 /* add a process block to the ready queue linked list */
 static void add_to_ready(pcb_t *pcb) {
     pcb_t *curr;
@@ -52,6 +59,7 @@ static void add_to_ready(pcb_t *pcb) {
         }
         curr->next = pcb;
     }
+    pcb->next = NULL;
     pthread_cond_broadcast(&not_idle);
     pthread_mutex_unlock(&ready_mutex);
 }
@@ -64,8 +72,21 @@ static pcb_t* pop_from_ready() {
     if(popped != NULL) {
         head = popped->next;
     }
-    pthread_mutex_lock(&ready_mutex);
+    pthread_mutex_unlock(&ready_mutex);
     return popped;
+}
+
+/* pop highest priority process from the ready queue */
+static pcb_t* pop_high_priority() {
+    pcb_t *popped,curr;
+    int highest = 0;
+    pthread_mutex_lock(&ready_mutex);
+    curr = head;
+    if(curr != NULL) {
+        while(curr != NULL) {
+            curr = curr->next;
+        }
+    }
 }
 
 
@@ -87,16 +108,21 @@ static pcb_t* pop_from_ready() {
  */
 static void schedule(unsigned int cpu_id)
 {
-    pcb_t *pcb = pop_from_ready();
+    pcb_t *pcb;
+    DEBUG_PRINT(("Scheduling something for %d\n",cpu_id));
+    pcb = pop_from_ready();
     if(pcb == NULL) {
-        DEBUG_PRINT(("Nothing in ready queue...idling..."));
+        DEBUG_PRINT(("Nothing in ready queue for %d...idling...\n",cpu_id));
         context_switch(cpu_id,NULL,-1);
     }
-    pcb->state = PROCESS_RUNNING;
-    pthread_mutex_lock(&current_mutex);
-    current[cpu_id] = pcb;
-    pthread_mutex_unlock(&current_mutex); 
-    context_switch(cpu_id,pcb,-1);
+    else {
+        logp(pcb,"Getting scheduled");
+        pcb->state = PROCESS_RUNNING;
+        pthread_mutex_lock(&current_mutex);
+        current[cpu_id] = pcb;
+        pthread_mutex_unlock(&current_mutex); 
+        context_switch(cpu_id,pcb,time_slice);
+    }
 }
 
 
@@ -137,7 +163,13 @@ extern void idle(unsigned int cpu_id)
  */
 extern void preempt(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pcb_t* pcb;
+    pthread_mutex_lock(&current_mutex);
+    pcb = current[cpu_id];
+    pthread_mutex_unlock(&current_mutex);
+    add_to_ready(pcb);
+    pcb->state = PROCESS_READY;
+    schedule(cpu_id);
 }
 
 
@@ -210,21 +242,39 @@ void logp(pcb_t *pcb, char *message) {
  */
 int main(int argc, char *argv[])
 {
-    int cpu_count;
+    int cpu_count,i;
+    is_round_robin = 0;
+    is_static_prior = 0;
+    time_slice = -1;
 
     /* Parse command-line arguments */
-    if (argc != 2)
-    {
-        fprintf(stderr, "CS 2200 Project 4 -- Multithreaded OS Simulator\n"
-            "Usage: ./os-sim <# CPUs> [ -r <time slice> | -p ]\n"
-            "    Default : FIFO Scheduler\n"
-            "         -r : Round-Robin Scheduler\n"
-            "         -p : Static Priority Scheduler\n\n");
-        return -1;
-    }
-    cpu_count = atoi(argv[1]);
 
-    /* FIX ME - Add support for -r and -p parameters*/
+    if(argc < 2 || argc > 5) {
+        print_help();
+        exit(1);
+    }
+
+    cpu_count = atoi(argv[1]);
+    if(cpu_count == 0) {
+        print_help();
+        exit(1);
+    }
+
+    for(i=0; i<argc; i++) {
+        if(strcmp(argv[i],"-r")==0) {
+            is_round_robin = 1;
+            if(i+1>=argc) {
+                print_help();
+                exit(1);
+            }
+            else {
+                time_slice = atoi(argv[i+1]);
+            }
+        }
+        if(strcmp(argv[i],"-p")==0) {
+            is_static_prior = 1;
+        }
+    }
 
     /* Allocate the current[] array and its mutex */
     current = malloc(sizeof(pcb_t*) * cpu_count);
@@ -242,6 +292,14 @@ int main(int argc, char *argv[])
     start_simulator(cpu_count);
 
     return 0;
+}
+    
+void print_help() {
+    fprintf(stderr, "CS 2200 Project 4 -- Multithreaded OS Simulator\n"
+        "Usage: ./os-sim <# CPUs> [ -r <time slice> | -p ]\n"
+        "    Default : FIFO Scheduler\n"
+        "         -r : Round-Robin Scheduler\n"
+        "         -p : Static Priority Scheduler\n\n");
 }
 
 
