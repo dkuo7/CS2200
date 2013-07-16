@@ -44,6 +44,7 @@ static pthread_cond_t not_idle;
 static int is_round_robin;
 static int time_slice;
 static int is_static_prior;
+static int cpu_count;
 
 /* add a process block to the ready queue linked list */
 static void add_to_ready(pcb_t *pcb) {
@@ -253,10 +254,17 @@ extern void terminate(unsigned int cpu_id)
  */
 extern void wake_up(pcb_t *process)
 {
+    int i;
     logp(process,"WAKING UP");
     process->state = PROCESS_READY;
     add_to_ready(process);
+    if(is_static_prior) {
+       for(i=0; i<cpu_count; i++) {
+           /* TODO */ 
+       }
+    }
     /* FIX ME */
+
 }
 
 void logp(pcb_t *pcb, char *message) {
@@ -271,7 +279,7 @@ void logp(pcb_t *pcb, char *message) {
  */
 int main(int argc, char *argv[])
 {
-    int cpu_count,i;
+    int i;
     is_round_robin = 0;
     is_static_prior = 0;
     time_slice = -1;
