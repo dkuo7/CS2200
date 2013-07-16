@@ -78,15 +78,39 @@ static pcb_t* pop_from_ready() {
 
 /* pop highest priority process from the ready queue */
 static pcb_t* pop_high_priority() {
-    pcb_t *popped,curr;
+    pcb_t *popped,*curr,*prev;
     int highest = 0;
     pthread_mutex_lock(&ready_mutex);
-    curr = head;
-    if(curr != NULL) {
+    if(head == NULL) {
+        popped = NULL;
+    }
+    else {
+        curr = head;
         while(curr != NULL) {
+            if(curr->static_priority > highest) {
+                highest = curr->static_priority;
+            }
+            curr = curr->next;
+        }
+        curr = head;
+        prev = head;
+        while(curr != NULL) {
+            if(curr->static_priority == highest) {
+                popped = curr;
+                if(curr==head) {
+                    head = curr->next;
+                }
+                else {
+                    prev->next = curr->next;
+                }
+                break;
+            }
+            prev = curr;
             curr = curr->next;
         }
     }
+    pthread_mutex_unlock(&ready_mutex);
+    return popped;
 }
 
 
@@ -110,7 +134,12 @@ static void schedule(unsigned int cpu_id)
 {
     pcb_t *pcb;
     DEBUG_PRINT(("Scheduling something for %d\n",cpu_id));
-    pcb = pop_from_ready();
+    if(is_static_prior) {
+        pcb = pop_high_priority();
+    }
+    else {
+        pcb = pop_from_ready();
+    }
     if(pcb == NULL) {
         DEBUG_PRINT(("Nothing in ready queue for %d...idling...\n",cpu_id));
         context_switch(cpu_id,NULL,-1);
