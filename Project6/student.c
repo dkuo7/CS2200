@@ -141,11 +141,8 @@ static void schedule(unsigned int cpu_id)
     else {
         pcb = pop_from_ready();
     }
-    if(pcb == NULL) {
-        DEBUG_PRINT(("Nothing in ready queue for %d...idling...\n",cpu_id));
-    }
-    else {
-        logp(pcb,"Getting scheduled");
+    logp(pcb,"Getting scheduled");
+    if(pcb != NULL) {
         pcb->state = PROCESS_RUNNING;
     }
     pthread_mutex_lock(&current_mutex);
@@ -170,16 +167,6 @@ extern void idle(unsigned int cpu_id)
     }
     pthread_mutex_unlock(&ready_mutex);
     schedule(cpu_id);
-
-    /*
-     * REMOVE THE LINE BELOW AFTER IMPLEMENTING IDLE()
-     *
-     * idle() must block when the ready queue is empty, or else the CPU threads
-     * will spin in a loop.  Until a ready queue is implemented, we'll put the
-     * thread to sleep to keep it from consuming 100% of the CPU time.  Once
-     * you implement a proper idle() function using a condition variable,
-     * remove the call to mt_safe_usleep() below.
-     */
 }
 
 
@@ -195,9 +182,9 @@ extern void preempt(unsigned int cpu_id)
     pcb_t* pcb;
     pthread_mutex_lock(&current_mutex);
     pcb = current[cpu_id];
+    pcb->state = PROCESS_READY;
     pthread_mutex_unlock(&current_mutex);
     add_to_ready(pcb);
-    pcb->state = PROCESS_READY;
     schedule(cpu_id);
 }
 
@@ -272,7 +259,7 @@ extern void wake_up(pcb_t *process)
                 }
         }
         pthread_mutex_unlock(&current_mutex);
-        if(low_id != -1) {
+        if(low_id != -1 && lowest < process->static_priority) {
             force_preempt(low_id); 
         }
     }

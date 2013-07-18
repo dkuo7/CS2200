@@ -1,20 +1,24 @@
 CS 2200 Summer 2013
 Project 6
-Name:
-GT Number:
+Name: Eric Peyton
+GT Number: 902705905
 
 Problem 1B
 ----------
+Total execution time
+1 CPUs: 67.6 s 
+2 CPUs: 36.3 s
+4 CPUs: 33.5 s
 
-/* Fix me */
+
+
+
 
 Problem 2B
 ----------
 
-/* Fix me */
 
 Problem 3B
 ----------
 
-/* Fix me */
 

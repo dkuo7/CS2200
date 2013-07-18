@@ -1,9 +1,3 @@
-# of Context Switches: 98
 Total execution time: 67.6 s
-Total time spent in READY state: 390.2 s
-# of Context Switches: 203
-Total execution time: 67.6 s
-Total time spent in READY state: 298.9 s
-# of Context Switches: 268
-Total execution time: 68.8 s
-Total time spent in READY state: 137.6 s
+Total execution time: 36.3 s
+Total execution time: 33.5 s
