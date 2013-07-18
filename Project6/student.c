@@ -143,16 +143,15 @@ static void schedule(unsigned int cpu_id)
     }
     if(pcb == NULL) {
         DEBUG_PRINT(("Nothing in ready queue for %d...idling...\n",cpu_id));
-        context_switch(cpu_id,NULL,-1);
     }
     else {
         logp(pcb,"Getting scheduled");
         pcb->state = PROCESS_RUNNING;
-        pthread_mutex_lock(&current_mutex);
-        current[cpu_id] = pcb;
-        pthread_mutex_unlock(&current_mutex); 
-        context_switch(cpu_id,pcb,time_slice);
     }
+    pthread_mutex_lock(&current_mutex);
+    current[cpu_id] = pcb;
+    pthread_mutex_unlock(&current_mutex); 
+    context_switch(cpu_id,pcb,time_slice);
 }
 
 
@@ -254,17 +253,29 @@ extern void terminate(unsigned int cpu_id)
  */
 extern void wake_up(pcb_t *process)
 {
-    int i;
+    int i,lowest,low_id;
     logp(process,"WAKING UP");
     process->state = PROCESS_READY;
     add_to_ready(process);
     if(is_static_prior) {
-       for(i=0; i<cpu_count; i++) {
-           /* TODO */ 
-       }
+        pthread_mutex_lock(&current_mutex);
+        low_id = -1;
+        lowest = 10;
+        for(i=0; i<cpu_count; i++) {
+                if(current[i] == NULL) {
+                    low_id = -1;
+                    break;
+                }
+                if(current[i]->static_priority < lowest) {
+                    lowest = current[i]->static_priority;
+                    low_id = i;
+                }
+        }
+        pthread_mutex_unlock(&current_mutex);
+        if(low_id != -1) {
+            force_preempt(low_id); 
+        }
     }
-    /* FIX ME */
-
 }
 
 void logp(pcb_t *pcb, char *message) {
