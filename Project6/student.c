@@ -51,16 +51,19 @@ static void add_to_ready(pcb_t *pcb) {
     pcb_t *curr;
     pthread_mutex_lock(&ready_mutex);
     curr = head;
+    /* check if queue is empty */
     if(curr==NULL) {
         head = pcb;
     }
     else {
+        /* loop through until end of queue */
         while(curr->next != NULL) {
            curr = curr->next; 
         }
         curr->next = pcb;
     }
     pcb->next = NULL;
+    /* broadcast that the queue is no longer empty */
     pthread_cond_broadcast(&not_idle);
     pthread_mutex_unlock(&ready_mutex);
 }
@@ -82,11 +85,13 @@ static pcb_t* pop_high_priority() {
     pcb_t *popped,*curr,*prev;
     int highest = 0;
     pthread_mutex_lock(&ready_mutex);
+    /* check if queue is empty */
     if(head == NULL) {
         popped = NULL;
     }
     else {
         curr = head;
+        /*  find the highest priority in the queue by looping through once */
         while(curr != NULL) {
             if(curr->static_priority > highest) {
                 highest = curr->static_priority;
@@ -95,6 +100,9 @@ static pcb_t* pop_high_priority() {
         }
         curr = head;
         prev = head;
+        /* loop through one more time
+           find the first process that matches
+           the highest priority found earlier */
         while(curr != NULL) {
             if(curr->static_priority == highest) {
                 popped = curr;
@@ -244,27 +252,33 @@ extern void wake_up(pcb_t *process)
     logp(process,"WAKING UP");
     process->state = PROCESS_READY;
     add_to_ready(process);
+    /* loop for processes to evict if static priority mode */
     if(is_static_prior) {
         pthread_mutex_lock(&current_mutex);
         low_id = -1;
         lowest = 10;
+        /* loop through all CPUs */
         for(i=0; i<cpu_count; i++) {
+                /* if find IDLE, stop looking */
                 if(current[i] == NULL) {
                     low_id = -1;
                     break;
                 }
+                /* grab the lowest priority available */
                 if(current[i]->static_priority < lowest) {
                     lowest = current[i]->static_priority;
                     low_id = i;
                 }
         }
         pthread_mutex_unlock(&current_mutex);
+        /* evict the process if found and lower priority than our process */
         if(low_id != -1 && lowest < process->static_priority) {
             force_preempt(low_id); 
         }
     }
 }
 
+/* simple debug print method */
 void logp(pcb_t *pcb, char *message) {
     DEBUG_PRINT(("PID: %d NAME: %s\t\t%s\n",pcb->pid,pcb->name,message));
 }
@@ -290,12 +304,16 @@ int main(int argc, char *argv[])
     }
 
     cpu_count = atoi(argv[1]);
+
+    /* if CPU parsed correctly */
     if(cpu_count == 0) {
         print_help();
         exit(1);
     }
 
+    /* loop through all arguments */
     for(i=0; i<argc; i++) {
+        /* activate the modes if found */
         if(strcmp(argv[i],"-r")==0) {
             is_round_robin = 1;
             if(i+1>=argc) {

@@ -10,15 +10,51 @@ Total execution time
 2 CPUs: 36.3 s
 4 CPUs: 33.5 s
 
-
-
-
+As the number of CPUs increases, the total execution time does not decrease in a linear fashion. Instead, the execution time decreases exponentially (an exponential decay). This is because our simulated computer does not often need to run more than two threads in parallel. With more than 2 CPUs, much of the CPU time is spend idle waiting for a thread to run.  The extra CPUs would be used more efficiently with more processes running or more multithreaded programs running.
 
 Problem 2B
 ----------
 
+800 ms
+# of Context Switches: 135
+Total execution time: 67.6 s
+Total time spent in READY state: 328.2 s
+
+600 ms
+# of Context Switches: 161
+Total execution time: 67.6 s
+Total time spent in READY state: 314.5 s
+
+400 ms
+# of Context Switches: 202
+Total execution time: 67.6 s
+Total time spent in READY state: 301.7 s
+
+200 ms
+# of Context Switches: 361
+Total execution time: 67.6 s
+Total time spent in READY state: 283.2 s
+
+In our simulation, the waiting time (time spend in ready state) decreased at a linear rate as the length of the time slice decreased. The execution time stayed the same but the number of context switches greatly increased. This is not always a good thing because the processor will incur many more cache misses as it gains affinity for a new process. There is also an extra context switching overhead in the round robin algorithm.
 
 Problem 3B
 ----------
+
+os-sim 1
+# of Context Switches: 94
+Total execution time: 68.8 s
+Total time spent in READY state: 402.8 s
+
+os-sim 1 -r 4
+# of Context Switches: 202
+Total execution time: 67.6 s
+Total time spent in READY state: 299.0 s
+
+os-sim 1 -p
+# of Context Switches: 170
+Total execution time: 69.1 s
+Total time spent in READY state: 139.1 s
+
+The algorithm with the closest approximation of SJF (lowest waiting time) is the priority scheduling algorithm. Since SJF is actually just a priority algorithm with execution time determining the priority level, this probably means that the priorities of the processes in our simulation are near the SJF priority L = 1 / CPU_burst_time. This may not be always be the case however, since priority levels are not always set by (estimated) execution time or may be set incorrectly.
 
 
