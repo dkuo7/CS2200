@@ -32,8 +32,12 @@ static int checksum(char *buffer, int length){
    *  to implement this function.  For simplicity, simply sum the ascii
    *  values of all the characters in the buffer, and return the total.
    */ 
-
-  return 0;
+    int i,sum;
+    sum = 0;
+    for(i=0;i<length;i++) {
+        sum += buffer[i];
+    }
+    return sum;
 
 }
 
@@ -52,7 +56,37 @@ static PACKET* packetize(char *buffer, int length, int *count){
    *  integer pointed to by 'count' should be updated to indicate
    *  the number of packets in the array.
    */ 
-    PACKET* packets = NULL;
+    int i,pos;
+    PACKET* packet;
+
+    /* Ceiling formula */
+    int size = (length + MAX_PAYLOAD_LENGTH - 1) / MAX_PAYLOAD_LENGTH;
+    *count = size;
+
+    /* Allocate space for packet structures */
+    PACKET* packets = calloc(size,sizeof(PACKET));
+    for(i=0; i<length; i++) {
+        /* Find correct packet and position in packet */
+        packet = packets + (i / MAX_PAYLOAD_LENGTH);
+        pos = (i % MAX_PAYLOAD_LENGTH);
+
+        /* Add data to payload */
+        packet->payload[pos] = buffer[i];
+
+        /* Check if last data in packet and assign type and checksum */
+        if(i == (length - 1)) {
+            packet->type = LAST_DATA;
+            packet->payload_length = pos + 1;
+            packet->checksum = checksum(packet->payload,packet->payload_length);
+        }
+        else if(pos == MAX_PAYLOAD_LENGTH - 1) {
+            packet->type = DATA;
+            packet->payload_length = MAX_PAYLOAD_LENGTH;
+            packet->checksum = checksum(packet->payload,packet->payload_length);
+        }
+    }
+
+    
     return packets;
 
 }
