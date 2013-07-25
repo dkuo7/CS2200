@@ -1,0 +1,229 @@
+<html>
+<title> CS2200 Summer 2013 Project 7</title>
+
+<body bgcolor="white">
+
+<h1>
+<table>
+<tr>
+<td><h1>CS2200 Intro to Systems and Networks<br>Project 7 -
+Implementing a Reliable Network<br>Summer 2013</h1></td>
+</tr>
+</table>
+</h1>
+
+<br>
+<h2><font color="#000000">Learning Objective:</font></h2>
+The learning objective is to help you understand that each layer in the network protocol stack has a different purpose and to guide you through 'upgrading' the transport layer of an artificial network in order to make the entire network more reliable.
+
+Specifically, this project was designed to:
+<ul>	<li>further expose the student to the use of threads in an
+            operating system, especially the network implementation.
+	<li>demonstrate how messages are segmented into packets and how
+	    they are reassembled.
+	<li>help the student understand why a checksum is needed and
+            when it is used.
+	<li>have the student understand and implement the stop-and-wait
+            protocol with ACKnowledgements Negative (NACK) Acknowledgements
+            and retransmissions.
+</ul>
+
+<h2>The Protocol Stack:</h2>
+
+We have provided you with code that implements the network protocol:
+<pre>
+     _______________________
+    |   Application Layer   |    <--- client.c
+    |-----------------------|
+    |    Transport Layer    |    <--- rtp.c
+    |-----------------------|
+    |     Network Layer     |    <--- network.o
+    |-----------------------|
+    |    Physical  Layer    |
+    |_______________________|
+</pre>
+
+<ul>
+<li>For the purpose of this project, the physical layer is implemented by the operating system and the underlying network
+hardware.</li>
+<li>We have implemented our own network layer and provided it to you as an
+object file (network.o). A 64-bit version is available as network64.o, rename 
+this if you are on a 64 bit architecture. By implementing our own network layer, 
+we can artificially create packet corruption and can simplify the network programming.
+</li>
+<li>The transport layer uses the services of the network layer to provide
+a specialized protocol to the application.  In the "real" network stack,
+the transport layer typically provides TCP or UDP services to the application
+using the IP services provided by the network layer.  <font color="#DD0000">
+For this project, you will be completing the transport layer.</font></li>
+<li>The application layer represents the end user application.  The application
+simply makes the appropriate API calls to connect to remote hosts, send and
+receive messages, and disconnect from remote hosts.</li>
+</ul>
+
+<h2><font color="#000000">Code Walk-Through:</font></h2>
+
+Here, we will briefly describe the code provided for this project.  It is
+important that you study and understand the code given to you.  In the past,
+we have asked students to write a large portion of this code, but we
+found this to be unreasonable during the last few weeks of school.  As
+a compromise, we have given you this code and simply ask you to complete it.
+However, YOU ARE RESPONSIBLE FOR UNDERSTANDING ALL OF THE CODE.
+<br><br>
+
+We have provided a diagram to show the interaction among the treads in
+the program (<a href="interact.gif">interact.gif</a>).  You may find it
+helpful to use this diagram as a reference as we walk through the code.
+<br><br>
+
+The client program takes two arguments.  The first argument is the server
+it should connect to (such as localhost or one of 
+<a href="http://support.cc.gatech.edu/facilities/general-access-servers/">these</a>), and the second
+argument is the port it should connect to (such as 4000).  Thus, the
+client can be run as follows:<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ./prj5-client shuttle1.cc.gatech.edu 4000<br><br>
+
+The client.c program represents the application layer.  It uses the services
+provided by the transport layer (rtp.c).  It begins by connecting to the
+remote host.  Look at the rtp_connect connection in rtp.c.  It simply uses the
+services provided by the network layer to connect to the remote host.  Next,
+the rtp_connect function initializes its RTP_CONNECTION structure, initializes
+its send and receive queue, initializes its mutexes, starts its threads, and
+returns the RTP_CONNECTION structure.<br><br>
+
+Next, the client program sends a message to the remote host using
+rtp_send_message().  Sending the message could take quite some time
+if the network connection is slow (imagine sending a 5MB file over a
+56k modem).  Thus, the rtp_send_message() message makes a copy of the
+information to send, places the message into a send queue, and returns so
+that the application can continue to do other things.  A separate thread,
+the rtp_send_thread actually sends the data across the network.  It waits for
+a message to be placed into the send queue, then extracts that message from
+the queue and sends it.<br /><br />
+
+Next, the client program receives a message from the network.  What happens
+if a message isn't available or the entire message has not yet been received?
+The rtp_receive_message() function blocks until a message can be pulled from
+the receive queue.  The rtp_recv_thread actually receives packets from the
+network and reassembles the packets into messages.  Once it receives a message,
+it places the message into the receive queue so that rtp_receive_message can
+extract it and return it to the application layer.<br /><br />
+
+The client program continues to send and receive messages until it is
+finished.  Last, the client program calls rtp_disconnect() to terminate
+the connection with the remote host.  This function changes the state
+of the connection so that other threads will know that this connection
+is dead.  The rtp_disconnect() function then calls net_disconnect(),
+signals the other threads, waits for the threads to finish, empties the
+queues, frees allocated space, and returns.<br /><br />
+
+A note on the network packets.  For the purposes of this project, there are
+four packet types:
+<ul>
+  <li>DATA - a data packet that contains part of a message in its payload.
+  <li>LAST_DATA - just like a data packet, but also signifies that it is
+                  the last packet in a message.
+  <li>ACK - acknowledges the receipt of the last packet
+  <li>NACK - a negative acknowledgement stating that the last packet received
+             was corrupted.
+</ul>
+
+
+<h2><font color="#000000">Part I:  Segmentation of Data</font></h2>
+
+When data is sent over a network, the data is chopped up into one or more
+parts and sent inside packets.  A packet contains information that describes
+the message such as the destination of the data, the source of the data, and
+the data itself!  The data being sent over the network is referred to as
+the 'payload'.  Look in network.h; what other fields does our network packet
+carry?  Think about why each field is needed.  How much payload data can we
+fit into each packet?  (Note: as with many things in this project, the packet
+data structure is simplified). <br><br>
+
+<b>(20 Points)</b> Open rtp.c and find the <i>packetize</i> function.  Complete
+this function.  Its purpose is to turn a message into an array of packets.
+It should:
+ <ol>
+   <li>Allocate an array of packets big enough to carry all of the data.
+   <li>Populate all the fields of the packet including the payload.  Remember,
+       The last packet should be a LAST_DATA packet.  All other packets should
+       be DATA packets.  THIS IS IMPORTANT.  The server checks for this, and it
+       will disconnect you if they are not filled in correctly.  If you neglect
+       the LAST_DATA packet, your program will hang forever waiting for a response
+       from the server, because it is waiting on you forever to send a terminating
+       packet.
+   <li>The 'count' variable points to an integer.  Update this integer setting
+       it equal to the length of the array you are returning.
+   <li>Return the array of packets.
+ </ol>
+
+Hint: Remember that this is integer division. If length % MAX_PAYLOAD_LENGTH = 0
+this is a special case that should be handled.
+<br><br>
+There are several other parts of the source code that say FIX ME!  The
+code to be inserted in these parts of the program will simply provide
+additional functionality but are not necessary at this time.  We will
+return to these parts of the code in Part II.<br /><br />
+
+<h2><font color="#000000">Part II:  When things go wrong.</font></h2>
+In the stop-and-wait protocol, the sending thread does the following things:
+<ol>
+   <li>Sends one packet at a time.
+   <li>After each packet, wait for an ACK or a NACK to be received.
+   <li>If a NACK is received, resend the last packet.  Otherwise, send
+       the next packet.
+</ol>
+The receiving thread should:
+<ol>
+   <li>Compute the checksum for each packet payload upon arrival.
+   <li>If the checksum does not match the checksum reported in the
+       packet header, send a NACK.  If it does match, send an ACK.
+</ol>
+
+<b>(Part A, 20 Points)</b> Open rtp.c and find the <i>checksum</i> function.
+Complete this function.  Simply sum the ASCII values of each character in the
+buffer and return the sum.  This is how the server computes the checksum
+and the server and client must compute the checksum the same way.<br><br>
+
+<b>(Part B, 30 Points)</b> Open rtp.c and find the <i>rtp_recv_thread</i>
+function.  If the packet is a DATA packet, the payload is added to the
+current buffer.  Modify the implementation so that the data is only added
+to the buffer if the checksum of the data matches the checksum in the
+packet header.  Next, implement the code that will signal the sending
+thread that a NACK or ACK has been received.  You will also need to
+determine a way to tell the sending thread whether a negative or
+positive acknowledgement was received. (Hint: it's ok to add fields to
+the RTP_CONNECTON data structure).<br><br>
+
+<b>(Part C, 30 Points)</b> Open rtp.c and find the <i>rtp_send_thread</i>
+function.  Find the line that says /* FIX ME */.  At this point, you should
+wait to be signaled by the receiving thread that a NACK or ACK has been
+received.  Once notified, take the appropriate action.  You should
+<U><B>NOT</B></U> call net_receive_packet in the send thread.  The
+receiving thread is responsible for receiving packets.<br><br>
+
+<h2>About running the server</h2>
+The general server syntax is ./prj5-server [port] [corruption] [stop-and-wait].
+The server has two different protocols that it can use. The first one is to not use stop and wait.
+<br>
+./prj5-server 4000 0.0 0
+<br>
+That would run the server on port 4000 not using stop and wait with no corruption. To enable corruption change the 0.0 to 0.3 for 30%. <font color="red">Unless you accommodated your rtp.c to not use stop and wait, using a 0 for the stop-and-wait variable will not make your client run correctly.</font>
+<br><br>
+To use the stop and wait protocol:
+<br>
+./prj5-server 4002 0.0 1
+<br>
+Again, to enable packet corruption simply change the 0.0 to 0.3 for 30%.
+<br><br>
+
+<h2><font color="#000000">Good luck</font></h2>
+Try not to start late on this project. It is important you understand these
+concepts for the final examination. It is also important to note that we will be grading with the stop and wait and corruption enabled.
+
+<h1>Submission</h1>
+
+Please submit everything in the assignment folder to make it easier for the TAs to grade them. Also, remember that this project WILL NOT HAVE A DEMO.
+
+</body>
+</html>
