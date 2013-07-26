@@ -69,7 +69,7 @@ static PACKET* packetize(char *buffer, int length, int *count){
         /* Find correct packet and position in packet */
         packet = packets + (i / MAX_PAYLOAD_LENGTH);
         pos = (i % MAX_PAYLOAD_LENGTH);
-        printf("Letter: %c Packet: %d Pos: %d\n",buffer[i],(i/MAX_PAYLOAD_LENGTH),pos);
+        /*printf("Letter: %c Packet: %d Pos: %d\n",buffer[i],(i/MAX_PAYLOAD_LENGTH),pos);*/
         /* Add data to payload */
         packet->payload[pos] = buffer[i];
 
@@ -86,7 +86,7 @@ static PACKET* packetize(char *buffer, int length, int *count){
         }
     }
 
-    printf("Packetizing: %s \nLength: %d\nNumber of Packets: %d\n",buffer,length,size);
+    /*printf("Packetizing: %s \nLength: %d\nNumber of Packets: %d\n",buffer,length,size);*/
     
     return packets;
 
@@ -139,10 +139,10 @@ static void *rtp_recv_thread(void *void_ptr){
                     int chcksum = checksum(packet.payload,packet.payload_length);
                     if(chcksum == packet.checksum) {
                         feedback->type = ACK; 
-                        temp = realloc(buffer,buffer_length+packet.payload_length);
+                        temp = realloc(buffer,(buffer_length+packet.payload_length)*sizeof(char));
                         buffer = temp;
                         for(i=0; i<packet.payload_length; i++) {
-                            buffer[i] = packet.payload[i];
+                            buffer[buffer_length+i] = packet.payload[i];
                         }
                         buffer_length += packet.payload_length;
                     }
