@@ -12,6 +12,8 @@ typedef struct _RTP_CONNECTION{
   pthread_t send_thread;
 
   /* FIX ME */
+  int ack;
+  int ack_sent;
   pthread_cond_t ack_cond;
   pthread_mutex_t ack_mutex;
 
