@@ -7,6 +7,7 @@
 #include "queue.h"
 #include "network.h"
 #include "rtp.h"
+#include "assert.h"
 
 typedef struct _MESSAGE{
   char* buffer;
@@ -65,11 +66,11 @@ static PACKET* packetize(char *buffer, int length, int *count){
 
     /* Allocate space for packet structures */
     PACKET* packets = calloc(size,sizeof(PACKET));
+    assert(packets != NULL);
     for(i=0; i<length; i++) {
         /* Find correct packet and position in packet */
         packet = packets + (i / MAX_PAYLOAD_LENGTH);
         pos = (i % MAX_PAYLOAD_LENGTH);
-        /*printf("Letter: %c Packet: %d Pos: %d\n",buffer[i],(i/MAX_PAYLOAD_LENGTH),pos);*/
         /* Add data to payload */
         packet->payload[pos] = buffer[i];
 
@@ -86,8 +87,6 @@ static PACKET* packetize(char *buffer, int length, int *count){
         }
     }
 
-    /*printf("Packetizing: %s \nLength: %d\nNumber of Packets: %d\n",buffer,length,size);*/
-    
     return packets;
 
 }
@@ -106,6 +105,7 @@ static void *rtp_recv_thread(void *void_ptr){
         MESSAGE *message = NULL;
         int buffer_length = 0;
         char *buffer = malloc(sizeof(char));
+        assert(buffer != NULL);
         PACKET packet;
 
         /* 
@@ -133,20 +133,30 @@ static void *rtp_recv_thread(void *void_ptr){
 	            * 4. if the payload matches, add the payload to the buffer
 	            *    as done below
 	            */
+
            
-                PACKET *feedback = malloc(sizeof(PACKET));
                 if(packet.type == DATA || packet.type == LAST_DATA) {
+                    /* it's a data packet, so ready a feedback packet */
+                    PACKET *feedback = malloc(sizeof(PACKET));
+                    assert(feedback != NULL);
+
+                    /* calc the checksum and check it */
                     int chcksum = checksum(packet.payload,packet.payload_length);
                     if(chcksum == packet.checksum) {
+                        /* good packet so make room on the  buffer */
                         feedback->type = ACK; 
                         temp = realloc(buffer,(buffer_length+packet.payload_length)*sizeof(char));
+                        assert(temp != NULL);
                         buffer = temp;
+
+                        /* copy the packet contents to the buffer and adjust the length */
                         for(i=0; i<packet.payload_length; i++) {
                             buffer[buffer_length+i] = packet.payload[i];
                         }
                         buffer_length += packet.payload_length;
                     }
                     else {
+                        /* bad packet so don't stop looping if last */
                         if(packet.type == LAST_DATA) {
                             packet.type = DATA;
                         }
@@ -168,13 +178,18 @@ static void *rtp_recv_thread(void *void_ptr){
             *     received.
             */
             if(packet.type == ACK || packet.type == NACK) {
+                /* [n]ack recieved so lock the mutex */
                 pthread_mutex_lock(&connection->ack_mutex);
+
+                /* set the type of feedback recieved */
                 if(packet.type == ACK) {
                     connection->ack = 1;
                 }
                 else if(packet.type == NACK) {
                     connection->ack = 0;
                 }
+
+                /* mark that feedback was sent and signal */
                 connection->ack_sent = 1;
                 pthread_cond_signal(&connection->ack_cond);
                 pthread_mutex_unlock(&connection->ack_mutex);
@@ -188,12 +203,19 @@ static void *rtp_recv_thread(void *void_ptr){
              *
              * Add message to the received queue here.
              */
+             /* initialize a message with the size of buffer */
              message = malloc(sizeof(MESSAGE));
+             assert(message != NULL);
              message->buffer = calloc(buffer_length,sizeof(char));
+             assert(message->buffer != NULL);
              message->length = buffer_length;
+
+             /* copy the buffer contents over */
              for(i=0; i<buffer_length;i++) {
                 message->buffer[i] = buffer[i]; 
              }
+
+             /* add the message to the queue */
              pthread_mutex_lock(&(connection->recv_mutex));
              queue_add(&(connection->recv_queue),message);
              pthread_cond_signal(&(connection->recv_cond));
@@ -260,6 +282,7 @@ static void *rtp_send_thread(void *void_ptr){
              }
              connection->ack_sent = 0;
              if(!connection->ack) {
+               /* stay at the same packet if nack received */
                i -= 1; 
              }
              pthread_mutex_unlock(&(connection->ack_mutex));
